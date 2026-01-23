@@ -6,6 +6,14 @@ public class Task {
         this.content = content;
     }
 
+    public void mark() {
+        done = true;
+    }
+
+    public void unmark() {
+        done = false;
+    }
+
     @Override
     public String toString() {
         String mark = done ? "✓" : " ";
