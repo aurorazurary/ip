@@ -7,9 +7,29 @@ public class Overflow {
     private int current = -1;
 
     public void add(String input) {
+        String process = input;
+        Task newT = null;
+        if (process.startsWith("todo")) {
+            process = process.substring(5);
+            newT = new Todo(process);
+        } else if (process.startsWith("deadline")) {
+            process = process.substring(9);
+            String[] parts = process.split(" /by ");
+            newT = new Deadline(parts[0], parts[1]);
+        } else if (process.startsWith("event")) {
+            process = process.substring(6);
+            String[] parts = process.split(" /from ");
+            String descr = parts[0];
+            String[] time = parts[1].split(" /to ");
+            String from = time[0];
+            String to = time.length > 1 ? time[1] : "";
+            newT = new Event(descr, from, to);
+        }
+
         current++;
-        tasks[current] = new Task(input);
-        System.out.println("added task: " + tasks[current]);
+        tasks[current] = newT;
+        System.out.println("Got it! I've added the task: " + tasks[current]);
+        System.out.println("Currently you have " + (current + 1) + " tasks.");
     }
 
     public void list() {
