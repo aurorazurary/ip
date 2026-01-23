@@ -5,7 +5,6 @@ public class Overflow {
     static String GREETINGS = "Good to see you!\nI'm Overflow, lemme know what I could do for you :>";
     static String FAREWELL = "Looking for the next time we meet!";
     private ArrayList<Task> tasks = new ArrayList<>();
-    private int current = -1;
 
     public void add(String input) {
         String process = input;
@@ -64,14 +63,13 @@ public class Overflow {
             return;
         }
 
-        current++;
         tasks.add(newT);
         System.out.println("Got it! I've added the task: " + newT);
-        System.out.println("Currently you have " + (current + 1) + " tasks.");
+        System.out.println("Currently you have " + tasks.size() + " tasks.");
     }
 
     public void list() {
-        for (int i = 0; i <= current; i++) {
+        for (int i = 0; i < tasks.size(); i++) {
             System.out.println(
                     (i + 1) + ". " + tasks.get(i)
             );
@@ -79,6 +77,11 @@ public class Overflow {
     }
 
     public void mark(String idx) {
+        if (idx.isEmpty()) {
+            System.out.println("OOPS! You have to choose a task number!");
+            return;
+        }
+
         int i = Integer.parseInt(idx) - 1;
         tasks.get(i).mark();
         System.out.println(
@@ -87,6 +90,11 @@ public class Overflow {
     }
 
     public void unmark(String idx) {
+        if (idx.isEmpty()) {
+            System.out.println("OOPS! You have to choose a task number!");
+            return;
+        }
+
         int i = Integer.parseInt(idx) - 1;
         tasks.get(i).unmark();
         System.out.println(
@@ -94,13 +102,30 @@ public class Overflow {
         );
     }
 
+    public void delete(String idx) {
+        if (idx.isEmpty()) {
+            System.out.println("OOPS! You have to choose a task number!");
+            return;
+        }
+
+        int i = Integer.parseInt(idx) - 1;
+        Task removed = tasks.get(i);
+        tasks.remove(i);
+        System.out.println(
+                "Deleted! \n" + removed
+        );
+        System.out.println("Currently you have " + tasks.size() + " tasks.");
+    }
+
     public void handle(String input) { //processes the inputs
         if (input.equals("list")) list();
         else if (input.startsWith("mark")) {
-            this.mark(input.substring(5));
-        }
-        else if (input.startsWith("unmark")) {
-            this.unmark(input.substring(7));
+            this.mark(input.substring(4).trim());
+        } else if (input.startsWith("unmark")) {
+            this.unmark(input.substring(6).trim());
+        } else if (input.startsWith("delete")) {
+            this.delete(input.substring(6).trim());
+
         }
         else this.add(input);
     }
