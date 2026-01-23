@@ -20,8 +20,30 @@ public class Overflow {
         }
     }
 
+    public void mark(String idx) {
+        int i = Integer.parseInt(idx) - 1;
+        tasks[i].mark();
+        System.out.println(
+                "Marked! \n" + tasks[i]
+        );
+    }
+
+    public void unmark(String idx) {
+        int i = Integer.parseInt(idx) - 1;
+        tasks[i].unmark();
+        System.out.println(
+                "Unmarked! \n" + tasks[i]
+        );
+    }
+
     public void handle(String input) { //processes the inputs
         if (input.equals("list")) list();
+        else if (input.startsWith("mark")) {
+            this.mark(input.substring(5));
+        }
+        else if (input.startsWith("unmark")) {
+            this.unmark(input.substring(7));
+        }
         else this.add(input);
     }
 
