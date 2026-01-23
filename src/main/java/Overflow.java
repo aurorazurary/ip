@@ -6,15 +6,16 @@ public class Overflow {
     private Task[] tasks = new Task[100];
     private int current = -1;
 
-    public void add(input) {
+    public void add(String input) {
         current++;
-        tasks[i] = input;
+        tasks[current] = new Task(input);
+        System.out.println("added task: " + tasks[current]);
     }
 
     public void list() {
         for (int i = 0; i <= current; i++) {
             System.out.println(
-                    i + ". " + tasks[i]
+                    (i + 1) + ". " + tasks[i]
             );
         }
     }
@@ -25,11 +26,14 @@ public class Overflow {
     }
 
     public static void main(String[] args) {
+        Overflow bot = new Overflow();
+
         System.out.println(GREETINGS);
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
+
         while (!input.equals("bye")) {
-            System.out.println(input);
+            bot.handle(input);
             input = sc.nextLine();
         }
         System.out.println(FAREWELL);
