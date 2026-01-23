@@ -1,5 +1,6 @@
 public class Task {
     private String content;
+    private boolean done = false;
 
     public Task(String content) {
         this.content = content;
@@ -7,6 +8,10 @@ public class Task {
 
     @Override
     public String toString() {
-        return content;
+        String mark = done ? "✓" : " ";
+        return "[" +
+                mark +
+                "] " +
+                content;
     }
 }
