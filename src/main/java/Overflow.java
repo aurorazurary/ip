@@ -1,9 +1,10 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Overflow {
     static String GREETINGS = "Good to see you!\nI'm Overflow, lemme know what I could do for you :>";
     static String FAREWELL = "Looking for the next time we meet!";
-    private Task[] tasks = new Task[100];
+    private ArrayList<Task> tasks = new ArrayList<>();
     private int current = -1;
 
     public void add(String input) {
@@ -64,32 +65,32 @@ public class Overflow {
         }
 
         current++;
-        tasks[current] = newT;
-        System.out.println("Got it! I've added the task: " + tasks[current]);
+        tasks.add(newT);
+        System.out.println("Got it! I've added the task: " + newT);
         System.out.println("Currently you have " + (current + 1) + " tasks.");
     }
 
     public void list() {
         for (int i = 0; i <= current; i++) {
             System.out.println(
-                    (i + 1) + ". " + tasks[i]
+                    (i + 1) + ". " + tasks.get(i)
             );
         }
     }
 
     public void mark(String idx) {
         int i = Integer.parseInt(idx) - 1;
-        tasks[i].mark();
+        tasks.get(i).mark();
         System.out.println(
-                "Marked! \n" + tasks[i]
+                "Marked! \n" + tasks.get(i)
         );
     }
 
     public void unmark(String idx) {
         int i = Integer.parseInt(idx) - 1;
-        tasks[i].unmark();
+        tasks.get(i).unmark();
         System.out.println(
-                "Unmarked! \n" + tasks[i]
+                "Unmarked! \n" + tasks.get(i)
         );
     }
 
