@@ -9,21 +9,58 @@ public class Overflow {
     public void add(String input) {
         String process = input;
         Task newT = null;
+
         if (process.startsWith("todo")) {
-            process = process.substring(5);
+            process = process.substring(4).trim();
+
+            if (process.isEmpty()) {
+                System.out.println(" OOPS!!! The description of a todo cannot be empty.");
+                return;
+            }
+
             newT = new Todo(process);
         } else if (process.startsWith("deadline")) {
-            process = process.substring(9);
+            process = process.substring(8).trim();
+
+            if (process.isEmpty()) {
+                System.out.println(" OOPS!!! The description of a deadline cannot be empty.");
+                return;
+            }
+
             String[] parts = process.split(" /by ");
+
+            if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                System.out.println(" OOPS!!! The description of an event cannot be empty.");
+                return;
+            }
+
             newT = new Deadline(parts[0], parts[1]);
         } else if (process.startsWith("event")) {
-            process = process.substring(6);
+            process = process.substring(5).trim();
+            if (process.isEmpty()) {
+                System.out.println(" OOPS!!! The description of an event cannot be empty.");
+                return;
+            }
+
             String[] parts = process.split(" /from ");
+            if (parts.length < 2) {
+                System.out.println(" OOPS!!! The event must have a /from time.");
+                return;
+            }
+
             String descr = parts[0];
             String[] time = parts[1].split(" /to ");
+            if (time.length < 2 || time[1].trim().isEmpty()) {
+                System.out.println(" OOPS!!! The event must have a /to time.");
+                return;
+            }
+
             String from = time[0];
             String to = time.length > 1 ? time[1] : "";
             newT = new Event(descr, from, to);
+        } else {
+            System.out.println("Sorry I don't understand what you are saying ;-;");
+            return;
         }
 
         current++;
