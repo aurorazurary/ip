@@ -9,7 +9,8 @@ public class Overflow {
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
         while (!input.equals("bye")) {
-            continue;
+            System.out.println(input);
+            input = sc.nextLine();
         }
         System.out.println(FAREWELL);
     }
