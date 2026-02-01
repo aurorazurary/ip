@@ -1,6 +1,15 @@
-public class Todo extends Task{
-    public Todo(String content) {
-        super(content);
+/**
+ * Represents a todo task without any date/time attached.
+ */
+public class Todo extends Task {
+
+    /**
+     * Creates a new todo task.
+     *
+     * @param name Description of the todo.
+     */
+    public Todo(String name) {
+        super(name);
     }
 
     @Override

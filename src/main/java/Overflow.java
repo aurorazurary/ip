@@ -1,145 +1,171 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Represents a chatbot that helps users manage their tasks.
+ * The chatbot can add, list, mark, unmark, and delete tasks.
+ */
 public class Overflow {
-    static String GREETINGS = "Good to see you!\nI'm Overflow, lemme know what I could do for you :>";
-    static String FAREWELL = "Looking for the next time we meet!";
+    private static final String GREETINGS = "Good to see you!\nI'm Overflow, lemme know what I could do for you :>";
+    private static final String FAREWELL = "Looking for the next time we meet!";
     private ArrayList<Task> tasks = new ArrayList<>();
 
-    public void add(String input) {
-        String process = input;
-        Task newT = null;
+    /**
+     * Adds a new task based on the user's input.
+     * Supports three types of tasks: todo, deadline, and event.
+     *
+     * @param input The user's input containing the task type and details.
+     */
+    public void addTask(String input) {
+        String processedInput = input;
+        Task newTask = null;
 
-        if (process.startsWith("todo")) {
-            process = process.substring(4).trim();
+        if (processedInput.startsWith("todo")) {
+            processedInput = processedInput.substring(4).trim();
 
-            if (process.isEmpty()) {
+            if (processedInput.isEmpty()) {
                 System.out.println(" OOPS!!! The description of a todo cannot be empty.");
                 return;
             }
 
-            newT = new Todo(process);
-        } else if (process.startsWith("deadline")) {
-            process = process.substring(8).trim();
+            newTask = new Todo(processedInput);
+        } else if (processedInput.startsWith("deadline")) {
+            processedInput = processedInput.substring(8).trim();
 
-            if (process.isEmpty()) {
+            if (processedInput.isEmpty()) {
                 System.out.println(" OOPS!!! The description of a deadline cannot be empty.");
                 return;
             }
 
-            String[] parts = process.split(" /by ");
+            String[] parts = processedInput.split(" /by ");
 
             if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                System.out.println(" OOPS!!! The deadline must have a /by time.");
+                return;
+            }
+
+            newTask = new Deadline(parts[0], parts[1]);
+        } else if (processedInput.startsWith("event")) {
+            processedInput = processedInput.substring(5).trim();
+            if (processedInput.isEmpty()) {
                 System.out.println(" OOPS!!! The description of an event cannot be empty.");
                 return;
             }
 
-            newT = new Deadline(parts[0], parts[1]);
-        } else if (process.startsWith("event")) {
-            process = process.substring(5).trim();
-            if (process.isEmpty()) {
-                System.out.println(" OOPS!!! The description of an event cannot be empty.");
-                return;
-            }
-
-            String[] parts = process.split(" /from ");
+            String[] parts = processedInput.split(" /from ");
             if (parts.length < 2) {
                 System.out.println(" OOPS!!! The event must have a /from time.");
                 return;
             }
 
-            String descr = parts[0];
-            String[] time = parts[1].split(" /to ");
-            if (time.length < 2 || time[1].trim().isEmpty()) {
+            String description = parts[0];
+            String[] timeParts = parts[1].split(" /to ");
+            if (timeParts.length < 2 || timeParts[1].trim().isEmpty()) {
                 System.out.println(" OOPS!!! The event must have a /to time.");
                 return;
             }
 
-            String from = time[0];
-            String to = time.length > 1 ? time[1] : "";
-            newT = new Event(descr, from, to);
+            String startTime = timeParts[0];
+            String endTime = timeParts[1];
+            newTask = new Event(description, startTime, endTime);
         } else {
             System.out.println("Sorry I don't understand what you are saying ;-;");
             return;
         }
 
-        tasks.add(newT);
-        System.out.println("Got it! I've added the task: " + newT);
+        tasks.add(newTask);
+        System.out.println("Got it! I've added the task: " + newTask);
         System.out.println("Currently you have " + tasks.size() + " tasks.");
     }
 
-    public void list() {
+    /**
+     * Displays all tasks in the task list.
+     */
+    public void listTasks() {
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println(
-                    (i + 1) + ". " + tasks.get(i)
-            );
+            System.out.println((i + 1) + ". " + tasks.get(i));
         }
     }
 
-    public void mark(String idx) {
-        if (idx.isEmpty()) {
+    /**
+     * Marks a task as done.
+     *
+     * @param index The index of the task to mark (1-based).
+     */
+    public void mark(String index) {
+        if (index.isEmpty()) {
             System.out.println("OOPS! You have to choose a task number!");
             return;
         }
 
-        int i = Integer.parseInt(idx) - 1;
-        tasks.get(i).mark();
-        System.out.println(
-                "Marked! \n" + tasks.get(i)
-        );
+        int taskIndex = Integer.parseInt(index) - 1;
+        tasks.get(taskIndex).mark();
+        System.out.println("Marked! \n" + tasks.get(taskIndex));
     }
 
-    public void unmark(String idx) {
-        if (idx.isEmpty()) {
+    /**
+     * Marks a task as not done.
+     *
+     * @param index The index of the task to unmark (1-based).
+     */
+    public void unmark(String index) {
+        if (index.isEmpty()) {
             System.out.println("OOPS! You have to choose a task number!");
             return;
         }
 
-        int i = Integer.parseInt(idx) - 1;
-        tasks.get(i).unmark();
-        System.out.println(
-                "Unmarked! \n" + tasks.get(i)
-        );
+        int taskIndex = Integer.parseInt(index) - 1;
+        tasks.get(taskIndex).unmark();
+        System.out.println("Unmarked! \n" + tasks.get(taskIndex));
     }
 
-    public void delete(String idx) {
-        if (idx.isEmpty()) {
+    /**
+     * Deletes a task from the task list.
+     *
+     * @param index The index of the task to delete (1-based).
+     */
+    public void delete(String index) {
+        if (index.isEmpty()) {
             System.out.println("OOPS! You have to choose a task number!");
             return;
         }
 
-        int i = Integer.parseInt(idx) - 1;
-        Task removed = tasks.get(i);
-        tasks.remove(i);
-        System.out.println(
-                "Deleted! \n" + removed
-        );
+        int taskIndex = Integer.parseInt(index) - 1;
+        Task removedTask = tasks.get(taskIndex);
+        tasks.remove(taskIndex);
+        System.out.println("Deleted! \n" + removedTask);
         System.out.println("Currently you have " + tasks.size() + " tasks.");
     }
 
-    public void handle(String input) { //processes the inputs
-        if (input.equals("list")) list();
-        else if (input.startsWith("mark")) {
+    /**
+     * Processes user input and executes the corresponding command.
+     *
+     * @param input The user's input command.
+     */
+    public void handleInput(String input) {
+        if (input.equals("list")) {
+            listTasks();
+        } else if (input.startsWith("mark")) {
             this.mark(input.substring(4).trim());
         } else if (input.startsWith("unmark")) {
             this.unmark(input.substring(6).trim());
         } else if (input.startsWith("delete")) {
             this.delete(input.substring(6).trim());
-
+        } else {
+            this.addTask(input);
         }
-        else this.add(input);
     }
 
     public static void main(String[] args) {
         Overflow bot = new Overflow();
 
         System.out.println(GREETINGS);
-        Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
 
         while (!input.equals("bye")) {
-            bot.handle(input);
-            input = sc.nextLine();
+            bot.handleInput(input);
+            input = scanner.nextLine();
         }
         System.out.println(FAREWELL);
     }
