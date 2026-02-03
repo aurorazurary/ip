@@ -99,6 +99,11 @@ public class Overflow {
      */
     private void handleMark(String input) throws OverflowException, IOException {
         int index = Parser.parseIndex(input, 4) - 1;
+
+        if (index < 0 || index >= tasks.size()) {
+            throw new OverflowException("OOPS! Task number is out of range!");
+        }
+
         tasks.mark(index);
         ui.showTaskMarked(tasks.get(index));
         storage.saveChange(tasks.getTasks());
@@ -113,6 +118,11 @@ public class Overflow {
      */
     private void handleUnmark(String input) throws OverflowException, IOException {
         int index = Parser.parseIndex(input, 6) - 1;
+
+        if (index < 0 || index >= tasks.size()) {
+            throw new OverflowException("OOPS! Task number is out of range!");
+        }
+
         tasks.unmark(index);
         ui.showTaskUnmarked(tasks.get(index));
         storage.saveChange(tasks.getTasks());
@@ -127,6 +137,11 @@ public class Overflow {
      */
     private void handleDelete(String input) throws OverflowException, IOException {
         int index = Parser.parseIndex(input, 6) - 1;
+
+        if (index < 0 || index >= tasks.size()) {
+            throw new OverflowException("OOPS! Task number is out of range!");
+        }
+
         Task deletedTask = tasks.delete(index);
         ui.showTaskDeleted(deletedTask, tasks.size());
         storage.saveChange(tasks.getTasks());
