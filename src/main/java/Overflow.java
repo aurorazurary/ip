@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -8,7 +10,18 @@ import java.util.Scanner;
 public class Overflow {
     private static final String GREETINGS = "Good to see you!\nI'm Overflow, lemme know what I could do for you :>";
     private static final String FAREWELL = "Looking for the next time we meet!";
-    private ArrayList<Task> tasks = new ArrayList<>();
+    private Storage fileHandler;
+    private ArrayList<Task> tasks;
+
+    public Overflow() {
+        fileHandler = new Storage("./src/main/data/tasks.txt");
+
+        try {
+            tasks = fileHandler.loadTasks();
+        } catch (FileNotFoundException e) {
+            tasks = new ArrayList<>();
+        }
+    }
 
     /**
      * Adds a new task based on the user's input.
@@ -16,7 +29,7 @@ public class Overflow {
      *
      * @param input The user's input containing the task type and details.
      */
-    public void addTask(String input) {
+    public void addTask(String input) throws IOException {
         String processedInput = input;
         Task newTask = null;
 
@@ -142,21 +155,33 @@ public class Overflow {
      *
      * @param input The user's input command.
      */
-    public void handleInput(String input) {
+    public void handleInput(String input) throws IOException {
         if (input.equals("list")) {
             listTasks();
         } else if (input.startsWith("mark")) {
             this.mark(input.substring(4).trim());
+            saveTasks();
         } else if (input.startsWith("unmark")) {
             this.unmark(input.substring(6).trim());
+            saveTasks();
         } else if (input.startsWith("delete")) {
             this.delete(input.substring(6).trim());
+            saveTasks();
         } else {
             this.addTask(input);
+            saveTasks();
         }
     }
 
-    public static void main(String[] args) {
+    private void saveTasks() {
+        try {
+            fileHandler.saveChange(tasks);
+        } catch (IOException e) {
+            System.out.println("Error saving: " + e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
         Overflow bot = new Overflow();
 
         System.out.println(GREETINGS);
