@@ -28,6 +28,10 @@ public class Task {
         done = false;
     }
 
+    public String toFileFormat() {
+        int isDone = done ? 1 : 0;
+        return isDone + " | " + name;
+    }
     @Override
     public String toString() {
         String mark = done ? "X" : " ";
