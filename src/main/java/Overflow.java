@@ -1,197 +1,188 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
- * Represents a chatbot that helps users manage their tasks.
- * The chatbot can add, list, mark, unmark, and delete tasks.
+ * Represents the main chatbot that helps users manage their tasks.
  */
 public class Overflow {
-    private static final String GREETINGS = "Good to see you!\nI'm Overflow, lemme know what I could do for you :>";
-    private static final String FAREWELL = "Looking for the next time we meet!";
-    private Storage fileHandler;
-    private ArrayList<Task> tasks;
+    private Storage storage;
+    private TaskList tasks;
+    private Ui ui;
 
-    public Overflow() {
-        fileHandler = new Storage("./src/main/data/tasks.txt");
-
+    /**
+     * Creates an Overflow chatbot with the specified file path.
+     *
+     * @param filePath Path to the file where tasks are stored.
+     */
+    public Overflow(String filePath) {
+        ui = new Ui();
+        storage = new Storage(filePath);
         try {
-            tasks = fileHandler.loadTasks();
+            tasks = new TaskList(storage.loadTasks());
         } catch (FileNotFoundException e) {
-            tasks = new ArrayList<>();
+            ui.showLoadingError();
+            tasks = new TaskList();
         }
     }
 
     /**
-     * Adds a new task based on the user's input.
-     * Supports three types of tasks: todo, deadline, and event.
-     *
-     * @param input The user's input containing the task type and details.
+     * Runs the chatbot.
      */
-    public void addTask(String input) throws IOException {
-        String processedInput = input;
-        Task newTask = null;
+    public void run() {
+        ui.showWelcome();
+        boolean isExit = false;
 
-        if (processedInput.startsWith("todo")) {
-            processedInput = processedInput.substring(4).trim();
+        while (!isExit) {
+            try {
+                String input = ui.readCommand();
 
-            if (processedInput.isEmpty()) {
-                System.out.println(" OOPS!!! The description of a todo cannot be empty.");
-                return;
+                if (input.equals("bye")) {
+                    isExit = true;
+                    continue;
+                }
+
+                handleCommand(input);
+
+            } catch (OverflowException e) {
+                ui.showError(e.getMessage());
+            } catch (IOException e) {
+                ui.showError("Error saving tasks: " + e.getMessage());
             }
-
-            newTask = new Todo(processedInput);
-        } else if (processedInput.startsWith("deadline")) {
-            processedInput = processedInput.substring(8).trim();
-
-            if (processedInput.isEmpty()) {
-                System.out.println(" OOPS!!! The description of a deadline cannot be empty.");
-                return;
-            }
-
-            String[] parts = processedInput.split(" /by ");
-
-            if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                System.out.println(" OOPS!!! The deadline must have a /by time.");
-                return;
-            }
-
-            newTask = new Deadline(parts[0], parts[1]);
-        } else if (processedInput.startsWith("event")) {
-            processedInput = processedInput.substring(5).trim();
-            if (processedInput.isEmpty()) {
-                System.out.println(" OOPS!!! The description of an event cannot be empty.");
-                return;
-            }
-
-            String[] parts = processedInput.split(" /from ");
-            if (parts.length < 2) {
-                System.out.println(" OOPS!!! The event must have a /from time.");
-                return;
-            }
-
-            String description = parts[0];
-            String[] timeParts = parts[1].split(" /to ");
-            if (timeParts.length < 2 || timeParts[1].trim().isEmpty()) {
-                System.out.println(" OOPS!!! The event must have a /to time.");
-                return;
-            }
-
-            String startTime = timeParts[0];
-            String endTime = timeParts[1];
-            newTask = new Event(description, startTime, endTime);
-        } else {
-            System.out.println("Sorry I don't understand what you are saying ;-;");
-            return;
         }
 
-        tasks.add(newTask);
-        System.out.println("Got it! I've added the task: " + newTask);
-        System.out.println("Currently you have " + tasks.size() + " tasks.");
+        ui.showGoodbye();
     }
 
     /**
-     * Displays all tasks in the task list.
-     */
-    public void listTasks() {
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + ". " + tasks.get(i));
-        }
-    }
-
-    /**
-     * Marks a task as done.
-     *
-     * @param index The index of the task to mark (1-based).
-     */
-    public void mark(String index) {
-        if (index.isEmpty()) {
-            System.out.println("OOPS! You have to choose a task number!");
-            return;
-        }
-
-        int taskIndex = Integer.parseInt(index) - 1;
-        tasks.get(taskIndex).mark();
-        System.out.println("Marked! \n" + tasks.get(taskIndex));
-    }
-
-    /**
-     * Marks a task as not done.
-     *
-     * @param index The index of the task to unmark (1-based).
-     */
-    public void unmark(String index) {
-        if (index.isEmpty()) {
-            System.out.println("OOPS! You have to choose a task number!");
-            return;
-        }
-
-        int taskIndex = Integer.parseInt(index) - 1;
-        tasks.get(taskIndex).unmark();
-        System.out.println("Unmarked! \n" + tasks.get(taskIndex));
-    }
-
-    /**
-     * Deletes a task from the task list.
-     *
-     * @param index The index of the task to delete (1-based).
-     */
-    public void delete(String index) {
-        if (index.isEmpty()) {
-            System.out.println("OOPS! You have to choose a task number!");
-            return;
-        }
-
-        int taskIndex = Integer.parseInt(index) - 1;
-        Task removedTask = tasks.get(taskIndex);
-        tasks.remove(taskIndex);
-        System.out.println("Deleted! \n" + removedTask);
-        System.out.println("Currently you have " + tasks.size() + " tasks.");
-    }
-
-    /**
-     * Processes user input and executes the corresponding command.
+     * Handles a user command.
      *
      * @param input The user's input command.
+     * @throws OverflowException If the command is invalid.
+     * @throws IOException If there's an error saving tasks.
      */
-    public void handleInput(String input) throws IOException {
-        if (input.equals("list")) {
-            listTasks();
-        } else if (input.startsWith("mark")) {
-            this.mark(input.substring(4).trim());
-            saveTasks();
-        } else if (input.startsWith("unmark")) {
-            this.unmark(input.substring(6).trim());
-            saveTasks();
-        } else if (input.startsWith("delete")) {
-            this.delete(input.substring(6).trim());
-            saveTasks();
-        } else {
-            this.addTask(input);
-            saveTasks();
+    private void handleCommand(String input) throws OverflowException, IOException {
+        String command = Parser.parseCommand(input);
+
+        switch (command) {
+            case "list":
+                ui.showTasks(tasks);
+                break;
+            case "mark":
+                handleMark(input);
+                break;
+            case "unmark":
+                handleUnmark(input);
+                break;
+            case "delete":
+                handleDelete(input);
+                break;
+            case "todo":
+                handleTodo(input);
+                break;
+            case "deadline":
+                handleDeadline(input);
+                break;
+            case "event":
+                handleEvent(input);
+                break;
+            default:
+                ui.showError("Sorry I don't understand what you are saying ;-;");
         }
     }
 
-    private void saveTasks() {
-        try {
-            fileHandler.saveChange(tasks);
-        } catch (IOException e) {
-            System.out.println("Error saving: " + e.getMessage());
-        }
+    /**
+     * Handles the mark command.
+     *
+     * @param input The user's input.
+     * @throws OverflowException If the index is invalid.
+     * @throws IOException If there's an error saving tasks.
+     */
+    private void handleMark(String input) throws OverflowException, IOException {
+        int index = Parser.parseIndex(input, 4) - 1;
+        tasks.mark(index);
+        ui.showTaskMarked(tasks.get(index));
+        storage.saveChange(tasks.getTasks());
     }
 
-    public static void main(String[] args) throws IOException {
-        Overflow bot = new Overflow();
+    /**
+     * Handles the unmark command.
+     *
+     * @param input The user's input.
+     * @throws OverflowException If the index is invalid.
+     * @throws IOException If there's an error saving tasks.
+     */
+    private void handleUnmark(String input) throws OverflowException, IOException {
+        int index = Parser.parseIndex(input, 6) - 1;
+        tasks.unmark(index);
+        ui.showTaskUnmarked(tasks.get(index));
+        storage.saveChange(tasks.getTasks());
+    }
 
-        System.out.println(GREETINGS);
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
+    /**
+     * Handles the delete command.
+     *
+     * @param input The user's input.
+     * @throws OverflowException If the index is invalid.
+     * @throws IOException If there's an error saving tasks.
+     */
+    private void handleDelete(String input) throws OverflowException, IOException {
+        int index = Parser.parseIndex(input, 6) - 1;
+        Task deletedTask = tasks.delete(index);
+        ui.showTaskDeleted(deletedTask, tasks.size());
+        storage.saveChange(tasks.getTasks());
+    }
 
-        while (!input.equals("bye")) {
-            bot.handleInput(input);
-            input = scanner.nextLine();
-        }
-        System.out.println(FAREWELL);
+    /**
+     * Handles the todo command.
+     *
+     * @param input The user's input.
+     * @throws OverflowException If the description is empty.
+     * @throws IOException If there's an error saving tasks.
+     */
+    private void handleTodo(String input) throws OverflowException, IOException {
+        String description = Parser.parseTodo(input);
+        Task newTask = new Todo(description);
+        tasks.add(newTask);
+        ui.showTaskAdded(newTask, tasks.size());
+        storage.saveChange(tasks.getTasks());
+    }
+
+    /**
+     * Handles the deadline command.
+     *
+     * @param input The user's input.
+     * @throws OverflowException If the deadline format is invalid.
+     * @throws IOException If there's an error saving tasks.
+     */
+    private void handleDeadline(String input) throws OverflowException, IOException {
+        String[] parts = Parser.parseDeadline(input);
+        Task newTask = new Deadline(parts[0], parts[1]);
+        tasks.add(newTask);
+        ui.showTaskAdded(newTask, tasks.size());
+        storage.saveChange(tasks.getTasks());
+    }
+
+    /**
+     * Handles the event command.
+     *
+     * @param input The user's input.
+     * @throws OverflowException If the event format is invalid.
+     * @throws IOException If there's an error saving tasks.
+     */
+    private void handleEvent(String input) throws OverflowException, IOException {
+        String[] parts = Parser.parseEvent(input);
+        Task newTask = new Event(parts[0], parts[1], parts[2]);
+        tasks.add(newTask);
+        ui.showTaskAdded(newTask, tasks.size());
+        storage.saveChange(tasks.getTasks());
+    }
+
+    /**
+     * Main method to run the Overflow chatbot.
+     *
+     * @param args Command line arguments (not used).
+     */
+    public static void main(String[] args) {
+        new Overflow("./src/main/data/tasks.txt").run();
     }
 }
