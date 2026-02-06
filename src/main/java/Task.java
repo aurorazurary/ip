@@ -28,6 +28,14 @@ public class Task {
         done = false;
     }
 
+    /**
+     * Return the name of the task.
+     * @return name Name of the task.
+     */
+    public String getName() {
+        return name;
+    }
+
     public String toFileFormat() {
         int isDone = done ? 1 : 0;
         return isDone + " | " + name;

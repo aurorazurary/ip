@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -86,6 +87,22 @@ public class Ui {
     public void showTasks(TaskList tasks) {
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + ". " + tasks.get(i));
+        }
+    }
+
+    /**
+     * Displays the search results.
+     *
+     * @param results The list of tasks that match the search.
+     */
+    public void showSearchResults(ArrayList<Task> results) {
+        if (results.isEmpty()) {
+            System.out.println("No matching tasks found!");
+        } else {
+            System.out.println("Here are the matching tasks in your list:");
+            for (int i = 0; i < results.size(); i++) {
+                System.out.println((i + 1) + ". " + results.get(i));
+            }
         }
     }
 

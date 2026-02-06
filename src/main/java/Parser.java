@@ -24,6 +24,8 @@ public class Parser {
             return "deadline";
         } else if (input.startsWith("event ")) {
             return "event";
+        } else if (input.startsWith("find ")) {
+            return "find";
         } else {
             return "unknown";
         }
@@ -117,4 +119,23 @@ public class Parser {
             throw new OverflowException("OOPS! Please provide a valid task number!");
         }
     }
+
+    /**
+     * Parses keywords from a find command.
+     *
+     * @param input The full user input.
+     * @param commandLength The length of the command word.
+     * @return An array of keywords to search for.
+     * @throws OverflowException If no keywords are provided.
+     */
+    public static String[] parseKeyword(String input, int commandLength) throws OverflowException {
+        String keywordString = input.substring(commandLength).trim();
+
+        if (keywordString.isEmpty()) {
+            throw new OverflowException("OOPS! You have to key in some keywords for me to find!");
+        }
+
+        return keywordString.split("\\s+");
+    }
+
 }

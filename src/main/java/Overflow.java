@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Represents the main chatbot that helps users manage their tasks.
@@ -84,6 +85,9 @@ public class Overflow {
                 break;
             case "event":
                 handleEvent(input);
+                break;
+            case "find":
+                handleFind(input);
                 break;
             default:
                 ui.showError("Sorry I don't understand what you are saying ;-;");
@@ -190,6 +194,18 @@ public class Overflow {
         tasks.add(newTask);
         ui.showTaskAdded(newTask, tasks.size());
         storage.saveChange(tasks.getTasks());
+    }
+
+    /**
+     * Handles the find command.
+     *
+     * @param input The user's input.
+     * @throws OverflowException If no keywords provided.
+     */
+    private void handleFind(String input) throws OverflowException {
+        String[] keywords = Parser.parseKeyword(input, 4);
+        ArrayList<Task> results = tasks.find(keywords);
+        ui.showSearchResults(results);
     }
 
     /**
