@@ -1,3 +1,8 @@
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 /**
  * Parses user input into commands and their parameters.
  */
@@ -140,6 +145,37 @@ public class Parser {
         }
 
         return keywordString.split("\\s+");
+    }
+
+    /**
+     * Parses a date string into LocalDate.
+     *
+     * @param dateString The date string in yyyy-MM-dd format.
+     * @return LocalDate object.
+     * @throws OverflowException If the date format is invalid.
+     */
+    public static LocalDate parseDate(String dateString) throws OverflowException {
+        try {
+            return LocalDate.parse(dateString.trim());
+        } catch (DateTimeParseException e) {
+            throw new OverflowException("OOPS! Please use the date format: yyyy-MM-dd (e.g., 2024-12-25)");
+        }
+    }
+
+    /**
+     * Parses a date-time string into LocalDateTime.
+     *
+     * @param dateTimeString The date-time string in yyyy-MM-dd HHmm format.
+     * @return LocalDateTime object.
+     * @throws OverflowException If the date-time format is invalid.
+     */
+    public static LocalDateTime parseDateTime(String dateTimeString) throws OverflowException {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+            return LocalDateTime.parse(dateTimeString.trim(), formatter);
+        } catch (DateTimeParseException e) {
+            throw new OverflowException("OOPS! Please use the format: yyyy-MM-dd HHmm (e.g., 2024-12-25 1800)");
+        }
     }
 
 }
