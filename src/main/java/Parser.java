@@ -59,10 +59,10 @@ public class Parser {
      * Parses a deadline command.
      *
      * @param input The full user input.
-     * @return An array with [description, deadline].
+     * @return An array with [description, LocalDateTime].
      * @throws OverflowException If the description or deadline is invalid.
      */
-    public static String[] parseDeadline(String input) throws OverflowException {
+    public static Object[] parseDeadline(String input) throws OverflowException {
         String processedInput = input.substring(8).trim();
 
         if (processedInput.isEmpty()) {
@@ -75,17 +75,20 @@ public class Parser {
             throw new OverflowException("OOPS!!! The deadline must have a /by time.");
         }
 
-        return new String[]{parts[0], parts[1]};
+        String description = parts[0];
+        LocalDateTime dateTime = parseDateTime(parts[1]); // This will throw if format is wrong
+
+        return new Object[]{description, dateTime};
     }
 
     /**
      * Parses an event command.
      *
      * @param input The full user input.
-     * @return An array with [description, startTime, endTime].
+     * @return An array with [description, startTime as LocalDateTime, endTime as LocalDateTime].
      * @throws OverflowException If the description or times are invalid.
      */
-    public static String[] parseEvent(String input) throws OverflowException {
+    public static Object[] parseEvent(String input) throws OverflowException {
         String processedInput = input.substring(5).trim();
 
         if (processedInput.isEmpty()) {
@@ -104,7 +107,10 @@ public class Parser {
             throw new OverflowException("OOPS!!! The event must have a /to time.");
         }
 
-        return new String[]{description, timeParts[0], timeParts[1]};
+        LocalDateTime startTime = parseDateTime(timeParts[0]);
+        LocalDateTime endTime = parseDateTime(timeParts[1]);
+
+        return new Object[]{description, startTime, endTime};
     }
 
     /**
