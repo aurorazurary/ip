@@ -1,3 +1,15 @@
+package overflow;
+
+import exception.OverflowException;
+import overflow.parser.Parser;
+import overflow.storage.Storage;
+import overflow.task.Deadline;
+import overflow.task.Event;
+import overflow.task.Task;
+import overflow.task.Todo;
+import overflow.tasklist.TaskList;
+import overflow.ui.Ui;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -12,7 +24,7 @@ public class Overflow {
     private Ui ui;
 
     /**
-     * Creates an Overflow chatbot with the specified file path.
+     * Creates a chatbot.Overflow chatbot with the specified file path.
      *
      * @param filePath Path to the file where tasks are stored.
      */
@@ -105,7 +117,7 @@ public class Overflow {
         int index = Parser.parseIndex(input, 4) - 1;
 
         if (index < 0 || index >= tasks.size()) {
-            throw new OverflowException("OOPS! Task number is out of range!");
+            throw new OverflowException("OOPS! overflow.task.Task number is out of range!");
         }
 
         tasks.mark(index);
@@ -124,7 +136,7 @@ public class Overflow {
         int index = Parser.parseIndex(input, 6) - 1;
 
         if (index < 0 || index >= tasks.size()) {
-            throw new OverflowException("OOPS! Task number is out of range!");
+            throw new OverflowException("OOPS! overflow.task.Task number is out of range!");
         }
 
         tasks.unmark(index);
@@ -143,7 +155,7 @@ public class Overflow {
         int index = Parser.parseIndex(input, 6) - 1;
 
         if (index < 0 || index >= tasks.size()) {
-            throw new OverflowException("OOPS! Task number is out of range!");
+            throw new OverflowException("OOPS! overflow.task.Task number is out of range!");
         }
 
         Task deletedTask = tasks.delete(index);
@@ -214,7 +226,7 @@ public class Overflow {
     }
 
     /**
-     * Main method to run the Overflow chatbot.
+     * Main method to run the chatbot.Overflow chatbot.
      *
      * @param args Command line arguments (not used).
      */

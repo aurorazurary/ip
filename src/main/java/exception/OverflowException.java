@@ -1,10 +1,12 @@
+package exception;
+
 /**
- * Represents exceptions specific to the Overflow chatbot.
+ * Represents exceptions specific to the chatbot.Overflow chatbot.
  */
 public class OverflowException extends Exception {
 
     /**
-     * Creates an OverflowException with the specified message.
+     * Creates an exception.OverflowException with the specified message.
      *
      * @param message The error message.
      */

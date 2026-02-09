@@ -1,15 +1,17 @@
+package overflow.task;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Represents a task that starts at a specific time and ends at a specific time.
+ * Represents a overflow.task that starts at a specific time and ends at a specific time.
  */
 public class Event extends Task {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
     /**
-     * Creates a new event task.
+     * Creates a new event overflow.task.
      *
      * @param name Description of the event.
      * @param startTime Start time of the event.

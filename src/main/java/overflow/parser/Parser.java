@@ -1,3 +1,7 @@
+package overflow.parser;
+
+import exception.OverflowException;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -118,20 +122,20 @@ public class Parser {
      *
      * @param input The full user input.
      * @param commandLength The length of the command word.
-     * @return The task index (1-based).
+     * @return The overflow.task index (1-based).
      * @throws OverflowException If the index is missing or invalid.
      */
     public static int parseIndex(String input, int commandLength) throws OverflowException {
         String indexString = input.substring(commandLength).trim();
 
         if (indexString.isEmpty()) {
-            throw new OverflowException("OOPS! You have to choose a task number!");
+            throw new OverflowException("OOPS! You have to choose a overflow.task number!");
         }
 
         try {
             return Integer.parseInt(indexString);
         } catch (NumberFormatException e) {
-            throw new OverflowException("OOPS! Please provide a valid task number!");
+            throw new OverflowException("OOPS! Please provide a valid overflow.task number!");
         }
     }
 

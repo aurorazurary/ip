@@ -1,36 +1,38 @@
+package overflow.task;
+
 /**
- * Represents a task with a description and completion status.
+ * Represents a overflow.task with a description and completion status.
  */
 public class Task {
     private String name;
     private boolean done = false;
 
     /**
-     * Creates a new task with the given content.
+     * Creates a new overflow.task with the given content.
      *
-     * @param name Description of the task.
+     * @param name Description of the overflow.task.
      */
     public Task(String name) {
         this.name = name;
     }
 
     /**
-     * Marks the task as done.
+     * Marks the overflow.task as done.
      */
     public void mark() {
         done = true;
     }
 
     /**
-     * Marks the task as not done.
+     * Marks the overflow.task as not done.
      */
     public void unmark() {
         done = false;
     }
 
     /**
-     * Return the name of the task.
-     * @return name Name of the task.
+     * Return the name of the overflow.task.
+     * @return name Name of the overflow.task.
      */
     public String getName() {
         return name;

@@ -1,3 +1,10 @@
+package overflow.storage;
+
+import overflow.task.Deadline;
+import overflow.task.Event;
+import overflow.task.Task;
+import overflow.task.Todo;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -14,7 +21,7 @@ public class Storage {
     private String filePath;
 
     /**
-     * Creates a Storage object with the specified file path.
+     * Creates a overflow.storage.Storage object with the specified file path.
      *
      * @param filePath Path to the file where tasks are stored.
      */

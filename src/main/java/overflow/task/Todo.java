@@ -1,10 +1,12 @@
+package overflow.task;
+
 /**
- * Represents a todo task without any date/time attached.
+ * Represents a todo overflow.task without any date/time attached.
  */
 public class Todo extends Task {
 
     /**
-     * Creates a new todo task.
+     * Creates a new todo overflow.task.
      *
      * @param name Description of the todo.
      */
