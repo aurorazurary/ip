@@ -2,6 +2,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,15 +20,19 @@ public class Storage {
      */
     public Storage(String filePath) {
         this.filePath = filePath;
-        File file = new File(filePath);
-        System.out.println("File location: " + file.getAbsolutePath());
     }
 
+    /**
+     * Loads tasks from the file.
+     *
+     * @return ArrayList of tasks loaded from the file.
+     * @throws FileNotFoundException If the file cannot be found.
+     */
     public ArrayList<Task> loadTasks() throws FileNotFoundException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
 
-        // If file doesn't exit, return empty list
+        // If file doesn't exist, return empty list
         if (!file.exists()) {
             return tasks;
         }
@@ -43,14 +49,16 @@ public class Storage {
             switch (taskType) {
             case "T" -> task = new Todo(taskName);
             case "E" -> {
-                    String startTime = parts[3];
-                    String endTime = parts[4];
-                    task = new Event(taskName, startTime, endTime);
-                }
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+                LocalDateTime startTime = LocalDateTime.parse(parts[3], formatter);
+                LocalDateTime endTime = LocalDateTime.parse(parts[4], formatter);
+                task = new Event(taskName, startTime, endTime);
+            }
             case "D" -> {
-                    String deadline = parts[3];
-                    task = new Deadline(taskName, deadline);
-                }
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+                LocalDateTime deadline = LocalDateTime.parse(parts[3], formatter);
+                task = new Deadline(taskName, deadline);
+            }
             }
 
             if (taskStatus.equals("1")) {
@@ -64,7 +72,21 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Saves tasks to the file.
+     *
+     * @param tasks ArrayList of tasks to save.
+     * @throws IOException If there's an error writing to the file.
+     */
     public void saveChange(ArrayList<Task> tasks) throws IOException {
+        File file = new File(filePath);
+        File directory = file.getParentFile();
+
+        // Create the directory if it doesn't exist
+        if (directory != null && !directory.exists()) {
+            directory.mkdirs();
+        }
+
         FileWriter writer = new FileWriter(filePath);
         for (Task task: tasks) {
             writer.write(task.toFileFormat() + "\n");
