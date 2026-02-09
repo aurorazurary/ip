@@ -10,23 +10,27 @@ public class Parser {
      * @return The command type (e.g., "list", "mark", "todo").
      */
     public static String parseCommand(String input) {
-        if (input.equals("list")) {
+        String[] parts = input.split(" ", 2);
+        String command = parts[0];
+
+        switch (command) {
+        case "list":
             return "list";
-        } else if (input.startsWith("mark ")) {
+        case "mark":
             return "mark";
-        } else if (input.startsWith("unmark ")) {
+        case "unmark":
             return "unmark";
-        } else if (input.startsWith("delete ")) {
+        case "delete":
             return "delete";
-        } else if (input.startsWith("todo ")) {
+        case "todo":
             return "todo";
-        } else if (input.startsWith("deadline ")) {
+        case "deadline":
             return "deadline";
-        } else if (input.startsWith("event ")) {
+        case "event":
             return "event";
-        } else if (input.startsWith("find ")) {
+        case "find":
             return "find";
-        } else {
+        default:
             return "unknown";
         }
     }

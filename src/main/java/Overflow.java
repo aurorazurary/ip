@@ -36,7 +36,6 @@ public class Overflow {
         while (!isExit) {
             try {
                 String input = ui.readCommand();
-
                 if (input.equals("bye")) {
                     isExit = true;
                     continue;
@@ -65,32 +64,32 @@ public class Overflow {
         String command = Parser.parseCommand(input);
 
         switch (command) {
-            case "list":
-                ui.showTasks(tasks);
-                break;
-            case "mark":
-                handleMark(input);
-                break;
-            case "unmark":
-                handleUnmark(input);
-                break;
-            case "delete":
-                handleDelete(input);
-                break;
-            case "todo":
-                handleTodo(input);
-                break;
-            case "deadline":
-                handleDeadline(input);
-                break;
-            case "event":
-                handleEvent(input);
-                break;
-            case "find":
-                handleFind(input);
-                break;
-            default:
-                ui.showError("Sorry I don't understand what you are saying ;-;");
+        case "list":
+            ui.showTasks(tasks);
+            break;
+        case "mark":
+            handleMark(input);
+            break;
+        case "unmark":
+            handleUnmark(input);
+            break;
+        case "delete":
+            handleDelete(input);
+            break;
+        case "todo":
+            handleTodo(input);
+            break;
+        case "deadline":
+            handleDeadline(input);
+            break;
+        case "event":
+            handleEvent(input);
+            break;
+        case "find":
+            handleFind(input);
+            break;
+        default:
+            ui.showError("Sorry I don't understand what you are saying ;-;");
         }
     }
 
