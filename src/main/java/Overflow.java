@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -173,8 +174,10 @@ public class Overflow {
      * @throws IOException If there's an error saving tasks.
      */
     private void handleDeadline(String input) throws OverflowException, IOException {
-        String[] parts = Parser.parseDeadline(input);
-        Task newTask = new Deadline(parts[0], parts[1]);
+        Object[] parts = Parser.parseDeadline(input);
+        String description = (String) parts[0];
+        LocalDateTime deadline = (LocalDateTime) parts[1];
+        Task newTask = new Deadline(description, deadline);
         tasks.add(newTask);
         ui.showTaskAdded(newTask, tasks.size());
         storage.saveChange(tasks.getTasks());
@@ -188,8 +191,11 @@ public class Overflow {
      * @throws IOException If there's an error saving tasks.
      */
     private void handleEvent(String input) throws OverflowException, IOException {
-        String[] parts = Parser.parseEvent(input);
-        Task newTask = new Event(parts[0], parts[1], parts[2]);
+        Object[] parts = Parser.parseEvent(input);
+        String description = (String) parts[0];
+        LocalDateTime startTime = (LocalDateTime) parts[1];
+        LocalDateTime endTime = (LocalDateTime) parts[2];
+        Task newTask = new Event(description, startTime, endTime);
         tasks.add(newTask);
         ui.showTaskAdded(newTask, tasks.size());
         storage.saveChange(tasks.getTasks());
@@ -213,6 +219,6 @@ public class Overflow {
      * @param args Command line arguments (not used).
      */
     public static void main(String[] args) {
-        new Overflow("./src/main/data/tasks.txt").run();
+        new Overflow("./data/tasks.txt").run();
     }
 }

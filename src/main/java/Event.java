@@ -43,7 +43,7 @@ public class Event extends Task {
     public String toFileFormat() {
         String status = super.toString().contains("X") ? "1" : "0";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-        return "E | " + status + " | " + getContent() + " | "
+        return "E | " + status + " | " + getName() + " | "
                 + startTime.format(formatter) + " | " + endTime.format(formatter);
     }
 
