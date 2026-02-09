@@ -4,6 +4,7 @@ import exception.OverflowException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -158,33 +159,60 @@ public class Parser {
     }
 
     /**
-     * Parses a date string into LocalDate.
+     * Parses a date-time string into LocalDateTime, allows a variety of
+     * input formate.
      *
-     * @param dateString The date string in yyyy-MM-dd format.
-     * @return LocalDate object.
-     * @throws OverflowException If the date format is invalid.
-     */
-    public static LocalDate parseDate(String dateString) throws OverflowException {
-        try {
-            return LocalDate.parse(dateString.trim());
-        } catch (DateTimeParseException e) {
-            throw new OverflowException("OOPS! Please use the date format: yyyy-MM-dd (e.g., 2024-12-25)");
-        }
-    }
-
-    /**
-     * Parses a date-time string into LocalDateTime.
-     *
-     * @param dateTimeString The date-time string in yyyy-MM-dd HHmm format.
+     * @param dateTimeString The date-time string in various formats.
      * @return LocalDateTime object.
      * @throws OverflowException If the date-time format is invalid.
      */
     public static LocalDateTime parseDateTime(String dateTimeString) throws OverflowException {
+        String string = dateTimeString.trim().toLowerCase();
+
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-            return LocalDateTime.parse(dateTimeString.trim(), formatter);
+            //now
+            if (string.equals("now")) {
+                return LocalDateTime.now();
+            }
+
+            // today
+            if (string.equals("today")) {
+                return LocalDate.now().atStartOfDay();
+            }
+
+            // HHmm
+            if (string.matches("\\d{4}")) {
+                LocalTime exactTime = LocalTime.parse(string, DateTimeFormatter.ofPattern("HHmm"));
+                return LocalDate.now().atTime(exactTime);
+            }
+
+            // MM-dd HHmm
+            if (string.matches("\\d{2}-\\d{2} \\d{4}")) {
+                int year = LocalDate.now().getYear();
+                DateTimeFormatter exactTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+                return LocalDateTime.parse(year + "-" + string, exactTime);
+            }
+
+            // MM-dd
+            if (string.matches("\\d{2}-\\d{2}")) {
+                int year = LocalDate.now().getYear();
+                return LocalDate.parse(year + "-" + string).atStartOfDay();
+            }
+
+            // yyyy-MM-dd HHmm
+            if (string.matches("\\d{4}-\\d{2}-\\d{2} \\d{4}")) {
+                DateTimeFormatter exactTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+                return LocalDateTime.parse(string, exactTime);
+            }
+
+            // yyyy-MM-dd
+            return LocalDate.parse(string).atStartOfDay();
+
         } catch (DateTimeParseException e) {
-            throw new OverflowException("OOPS! Please use the format: yyyy-MM-dd HHmm (e.g., 2024-12-25 1800)");
+            throw new OverflowException(
+                    "OOPS! Use: now, today, HHmm, MM-dd, MM-dd HHmm, yyyy-MM-dd, or yyyy-MM-dd HHmm"
+                            + " to indicate time!"
+            );
         }
     }
 
