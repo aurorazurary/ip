@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Represents the main chatbot that helps users manage their tasks.
@@ -77,32 +78,32 @@ public class Overflow {
         String command = Parser.parseCommand(input);
 
         switch (command) {
-        case "list":
-            ui.showTasks(tasks);
-            break;
-        case "mark":
-            handleMark(input);
-            break;
-        case "unmark":
-            handleUnmark(input);
-            break;
-        case "delete":
-            handleDelete(input);
-            break;
-        case "todo":
-            handleTodo(input);
-            break;
-        case "deadline":
-            handleDeadline(input);
-            break;
-        case "event":
-            handleEvent(input);
-            break;
-        case "find":
-            handleFind(input);
-            break;
-        default:
-            ui.showError("Sorry I don't understand what you are saying ;-;");
+            case "list":
+                ui.showTasks(tasks);
+                break;
+            case "mark":
+                handleMark(input);
+                break;
+            case "unmark":
+                handleUnmark(input);
+                break;
+            case "delete":
+                handleDelete(input);
+                break;
+            case "todo":
+                handleTodo(input);
+                break;
+            case "deadline":
+                handleDeadline(input);
+                break;
+            case "event":
+                handleEvent(input);
+                break;
+            case "find":
+                handleFind(input);
+                break;
+            default:
+                ui.showError("Sorry I don't understand what you are saying ;-;");
         }
     }
 
@@ -209,7 +210,7 @@ public class Overflow {
      */
     private void handleFind(String input) throws OverflowException {
         String[] keywords = Parser.parseKeyword(input, 4);
-        ArrayList<Task> results = tasks.find(keywords);
+        HashMap<String, ArrayList<Task>> results = tasks.find(keywords);
         ui.showSearchResults(results);
     }
 
