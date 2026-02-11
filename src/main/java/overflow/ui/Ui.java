@@ -4,6 +4,7 @@ import overflow.task.Task;
 import overflow.tasklist.TaskList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -99,17 +100,21 @@ public class Ui {
     }
 
     /**
-     * Displays the search results.
+     * Displays the search results grouped by keyword.
      *
-     * @param results The list of tasks that match the search.
+     * @param resultsByKeyword HashMap mapping keywords to their matching tasks.
      */
-    public void showSearchResults(ArrayList<Task> results) {
-        if (results.isEmpty()) {
+    public void showSearchResults(HashMap<String, ArrayList<Task>> resultsByKeyword) {
+        if (resultsByKeyword.isEmpty()) {
             System.out.println("No matching tasks found!");
-        } else {
-            System.out.println("Here are the matching tasks in your list:");
-            for (int i = 0; i < results.size(); i++) {
-                System.out.println((i + 1) + ". " + results.get(i));
+            return;
+        }
+
+        for (String keyword : resultsByKeyword.keySet()) {
+            ArrayList<Task> tasks = resultsByKeyword.get(keyword);
+            System.out.println("\nTasks matching \"" + keyword + "\":");
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println((i + 1) + ". " + tasks.get(i));
             }
         }
     }

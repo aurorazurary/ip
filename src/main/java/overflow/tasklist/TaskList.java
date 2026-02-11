@@ -3,6 +3,7 @@ package overflow.tasklist;
 import overflow.task.Task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Represents a list of tasks with operations to add, delete, mark, and unmark tasks.
@@ -92,24 +93,29 @@ public class TaskList {
     }
 
     /**
-     * Finds tasks that contain any of the given keywords.
+     * Finds tasks that contain any of the given keywords and groups them by keyword.
      *
      * @param keywords Array of keywords to search for.
-     * @return ArrayList of tasks that match any keyword.
+     * @return HashMap mapping each keyword to its matching tasks.
      */
-    public ArrayList<Task> find(String[] keywords) {
-        ArrayList<Task> matchingTasks = new ArrayList<>();
+    public HashMap<String, ArrayList<Task>> find(String[] keywords) {
+        HashMap<String, ArrayList<Task>> resultsByKeyword = new HashMap<>();
 
-        for (Task task : tasks) {
-            String taskString = task.getName().toLowerCase();
-            for (String keyword : keywords) {
-                if (taskString.contains(keyword.toLowerCase())) {
+        for (String keyword : keywords) {
+            ArrayList<Task> matchingTasks = new ArrayList<>();
+
+            for (Task task : tasks) {
+                String taskName = task.getName().toLowerCase();
+                if (taskName.contains(keyword.toLowerCase())) {
                     matchingTasks.add(task);
-                    break; // Found a match, move to next overflow.task in the list
                 }
+            }
+
+            if (!matchingTasks.isEmpty()) {
+                resultsByKeyword.put(keyword, matchingTasks);
             }
         }
 
-        return matchingTasks;
+        return resultsByKeyword;
     }
 }
