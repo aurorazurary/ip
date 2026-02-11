@@ -1,6 +1,6 @@
 package overflow.ui;
 
-import overflow.parser.exception.OverflowException;
+import overflow.exception.OverflowException;
 import overflow.task.Task;
 import overflow.tasklist.TaskList;
 

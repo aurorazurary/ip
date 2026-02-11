@@ -1,4 +1,4 @@
-package overflow.parser.exception;
+package overflow.exception;
 
 /**
  * Represents exceptions specific to the chatbot.Overflow chatbot.
@@ -6,7 +6,7 @@ package overflow.parser.exception;
 public class OverflowException extends Exception {
 
     /**
-     * Creates an overflow.parser.exception.OverflowException with the specified message.
+     * Creates an overflow.exception.OverflowException with the specified message.
      *
      * @param message The error message.
      */

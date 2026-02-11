@@ -1,6 +1,6 @@
 package overflow.parser;
 
-import overflow.parser.exception.OverflowException;
+import overflow.exception.OverflowException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

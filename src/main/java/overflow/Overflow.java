@@ -1,6 +1,6 @@
 package overflow;
 
-import overflow.parser.exception.OverflowException;
+import overflow.exception.OverflowException;
 import overflow.parser.Parser;
 import overflow.storage.Storage;
 import overflow.task.Deadline;
