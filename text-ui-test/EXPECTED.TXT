@@ -1,10 +1,10 @@
 Good to see you!
-I'm Overflow, lemme know what I could do for you :>
-Got it! I've added the task: [T][ ] read book
+I'm overflow.Overflow, lemme know what I could do for you :>
+Got it! I've added the overflow.task: [T][ ] read book
 Currently you have 1 tasks.
-Got it! I've added the task: [D][ ] return book (by: Sunday)
+Got it! I've added the overflow.task: [D][ ] return book (by: Sunday)
 Currently you have 2 tasks.
-Got it! I've added the task: [E][ ] project meeting (from: Mon 2pm to: 4pm)
+Got it! I've added the overflow.task: [E][ ] project meeting (from: Mon 2pm to: 4pm)
 Currently you have 3 tasks.
 1. [T][ ] read book
 2. [D][ ] return book (by: Sunday)

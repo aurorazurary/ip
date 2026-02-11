@@ -1,5 +1,6 @@
 package overflow.ui;
 
+import overflow.parser.exception.OverflowException;
 import overflow.task.Task;
 import overflow.tasklist.TaskList;
 
@@ -89,7 +90,7 @@ public class Ui {
      *
      * @param tasks The list of tasks to display.
      */
-    public void showTasks(TaskList tasks) {
+    public void showTasks(TaskList tasks) throws OverflowException {
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + ". " + tasks.get(i));
         }

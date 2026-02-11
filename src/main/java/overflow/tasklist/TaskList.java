@@ -1,5 +1,6 @@
 package overflow.tasklist;
 
+import overflow.parser.exception.OverflowException;
 import overflow.task.Task;
 
 import java.util.ArrayList;
@@ -41,7 +42,8 @@ public class TaskList {
      * @param index The index of the overflow.task to delete (0-based).
      * @return The deleted overflow.task.
      */
-    public Task delete(int index) {
+    public Task delete(int index) throws OverflowException {
+        validateIndex(index);
         return tasks.remove(index);
     }
 
@@ -51,7 +53,8 @@ public class TaskList {
      * @param index The index of the overflow.task (0-based).
      * @return The overflow.task at the specified index.
      */
-    public Task get(int index) {
+    public Task get(int index) throws OverflowException {
+        validateIndex(index);
         return tasks.get(index);
     }
 
@@ -60,7 +63,8 @@ public class TaskList {
      *
      * @param index The index of the overflow.task to mark (0-based).
      */
-    public void mark(int index) {
+    public void mark(int index) throws OverflowException {
+        validateIndex(index);
         tasks.get(index).mark();
     }
 
@@ -69,7 +73,8 @@ public class TaskList {
      *
      * @param index The index of the overflow.task to unmark (0-based).
      */
-    public void unmark(int index) {
+    public void unmark(int index) throws OverflowException {
+        validateIndex(index);
         tasks.get(index).unmark();
     }
 
@@ -89,6 +94,12 @@ public class TaskList {
      */
     public ArrayList<Task> getTasks() {
         return tasks;
+    }
+
+    private void validateIndex(int index) throws OverflowException {
+        if (index < 0 || index >= tasks.size()) {
+            throw new OverflowException("OOPS! Task number is out of range!");
+        }
     }
 
     /**
