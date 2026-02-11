@@ -67,7 +67,7 @@ public class Overflow {
     }
 
     /**
-     * Handles a user command.
+     * Handles a user input depending on the command word.
      *
      * @param input The user's input command.
      * @throws OverflowException If the command is invalid.
@@ -107,7 +107,7 @@ public class Overflow {
     }
 
     /**
-     * Handles the mark command.
+     * Handles the mark command to mark a task.
      *
      * @param input The user's input.
      * @throws OverflowException If the index is invalid.
@@ -126,7 +126,7 @@ public class Overflow {
     }
 
     /**
-     * Handles the unmark command.
+     * Handles the unmark command to unmark a task.
      *
      * @param input The user's input.
      * @throws OverflowException If the index is invalid.
@@ -145,7 +145,7 @@ public class Overflow {
     }
 
     /**
-     * Handles the delete command.
+     * Handles the delete command to delete a task.
      *
      * @param input The user's input.
      * @throws OverflowException If the index is invalid.
@@ -164,7 +164,7 @@ public class Overflow {
     }
 
     /**
-     * Handles the todo command.
+     * Handles the todo command to create a todo task.
      *
      * @param input The user's input.
      * @throws OverflowException If the description is empty.
@@ -179,7 +179,7 @@ public class Overflow {
     }
 
     /**
-     * Handles the deadline command.
+     * Handles the deadline command to create a deadline task.
      *
      * @param input The user's input.
      * @throws OverflowException If the deadline format is invalid.
@@ -196,7 +196,7 @@ public class Overflow {
     }
 
     /**
-     * Handles the event command.
+     * Handles the event command to create an event task.
      *
      * @param input The user's input.
      * @throws OverflowException If the event format is invalid.
@@ -214,7 +214,7 @@ public class Overflow {
     }
 
     /**
-     * Handles the find command.
+     * Handles the find command to find tasks including any give keywords.
      *
      * @param input The user's input.
      * @throws OverflowException If no keywords provided.
