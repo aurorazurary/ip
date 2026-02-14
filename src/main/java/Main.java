@@ -25,6 +25,8 @@ public class Main extends Application {
         userInput = new TextField();
         sendButton = new Button("Send");
 
+        sendButton.setOnAction(e -> handleUserInput());
+
         // Layout
         VBox mainLayout = new VBox(10);
         mainLayout.getChildren().addAll(scrollPane, userInput, sendButton);
@@ -35,4 +37,21 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
+    /**
+     * Separates the user and the bot's inputs
+     */
+    private void handleUserInput() {
+        String input = userInput.getText();
+        if (!input.isEmpty()) {
+            // Add user message to chat
+            dialogContainer.getChildren().add(new javafx.scene.control.Label("You: " + input));
+
+            // Add bot response
+            dialogContainer.getChildren().add(new javafx.scene.control.Label("Overflow: Got it!"));
+
+            userInput.clear();
+        }
+    }
 }
+
