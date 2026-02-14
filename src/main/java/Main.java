@@ -1,0 +1,19 @@
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
+
+/**
+ * Main GUI class for Overflow chatbot.
+ */
+public class Main extends Application {
+
+    @Override
+    public void start(Stage stage) {
+        Label helloWorld = new Label("Hello World from Overflow!"); // Creating a new Label
+        Scene scene = new Scene(helloWorld); // Setting the scene to be our Label
+
+        stage.setScene(scene); // Setting the stage to show our scene
+        stage.show(); // Render the stage
+    }
+}
