@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import overflow.Overflow;
 
 public class Main extends Application {
-
+    private static final String DEFAULT_FILE_PATH = "./data/tasks.txt";
     private VBox dialogContainer;
     private TextField userInput;
     private Button sendButton;
@@ -19,7 +19,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         // Initialize Overflow
-        overflow = new Overflow("./data/tasks.txt");
+        overflow = new Overflow(DEFAULT_FILE_PATH);
 
         // Create components
         scrollPane = new ScrollPane();
