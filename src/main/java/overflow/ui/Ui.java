@@ -1,18 +1,19 @@
 package overflow.ui;
 
-import overflow.exception.OverflowException;
-import overflow.task.Task;
-import overflow.tasklist.TaskList;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+
+import overflow.exception.OverflowException;
+import overflow.task.Task;
+import overflow.tasklist.TaskList;
 
 /**
  * Handles interactions with the user.
  */
 public class Ui {
-    private static final String GREETINGS = "Good to see you!\nI'm chatbot.Overflow, lemme know what I could do for you :>";
+    private static final String GREETINGS = "Good to see you!\n"
+            + "I'm chatbot.Overflow, lemme know what I could do for you :>";
     private static final String FAREWELL = "Looking for the next time we meet!";
     private Scanner scanner;
 

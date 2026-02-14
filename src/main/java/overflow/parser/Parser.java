@@ -1,12 +1,12 @@
 package overflow.parser;
 
-import overflow.exception.OverflowException;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import overflow.exception.OverflowException;
 
 /**
  * Parses user input into commands and their parameters.

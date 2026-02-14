@@ -38,10 +38,16 @@ public class Task {
         return name;
     }
 
+    /**
+     * Converts a Task object into file format for storage.
+     *
+     * @return A string representation in the format "status | name" where status is 1 for done, 0 for not done.
+     */
     public String toFileFormat() {
         int isDone = done ? 1 : 0;
         return isDone + " | " + name;
     }
+
     @Override
     public String toString() {
         String mark = done ? "X" : " ";

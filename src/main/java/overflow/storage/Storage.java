@@ -1,10 +1,5 @@
 package overflow.storage;
 
-import overflow.task.Deadline;
-import overflow.task.Event;
-import overflow.task.Task;
-import overflow.task.Todo;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -13,6 +8,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import overflow.task.Deadline;
+import overflow.task.Event;
+import overflow.task.Task;
+import overflow.task.Todo;
 
 /**
  * Handles the loading and saving of tasks to a file on disk.
@@ -52,7 +52,6 @@ public class Storage {
             String taskName = parts[2];
 
             Task task = null;
-
             switch (taskType) {
             case "T" -> task = new Todo(taskName);
             case "E" -> {
@@ -65,6 +64,8 @@ public class Storage {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
                 LocalDateTime deadline = LocalDateTime.parse(parts[3], formatter);
                 task = new Deadline(taskName, deadline);
+            } default -> {
+                continue;
             }
             }
 
@@ -102,3 +103,4 @@ public class Storage {
         writer.close();
     }
 }
+

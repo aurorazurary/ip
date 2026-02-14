@@ -1,14 +1,15 @@
 package overflow.parser;
 
-import overflow.exception.OverflowException;
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.LocalDateTime;
+
+import org.junit.jupiter.api.Test;
+
+import overflow.exception.OverflowException;
 
 /**
  * Tests for the Parser class.
@@ -173,3 +174,4 @@ public class ParserTest {
         });
     }
 }
+
