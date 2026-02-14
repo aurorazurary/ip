@@ -6,17 +6,21 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-/**
- * Main GUI class for Overflow chatbot.
- */
+import overflow.Overflow;
+
 public class Main extends Application {
+
     private VBox dialogContainer;
     private TextField userInput;
     private Button sendButton;
     private ScrollPane scrollPane;
+    private Overflow overflow;  // Add this
 
     @Override
     public void start(Stage stage) {
+        // Initialize Overflow
+        overflow = new Overflow("./data/tasks.txt");
+
         // Create components
         scrollPane = new ScrollPane();
         dialogContainer = new VBox();
@@ -38,17 +42,15 @@ public class Main extends Application {
         stage.show();
     }
 
-    /**
-     * Separates the user and the bot's inputs
-     */
     private void handleUserInput() {
         String input = userInput.getText();
         if (!input.isEmpty()) {
-            // Add user message to chat
+            // Add user message
             dialogContainer.getChildren().add(new javafx.scene.control.Label("You: " + input));
 
-            // Add bot response
-            dialogContainer.getChildren().add(new javafx.scene.control.Label("Overflow: Got it!"));
+            // Get bot response
+            String response = overflow.getResponse(input);
+            dialogContainer.getChildren().add(new javafx.scene.control.Label("Overflow: " + response));
 
             userInput.clear();
         }
