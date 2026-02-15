@@ -76,7 +76,7 @@ public class Main extends Application {
 
         sendButton.setOnAction(e -> handleUserInput());
 
-        dialogContainer.getChildren().add(new DialogBox(GREETINGS, botImage));
+        dialogContainer.getChildren().add(DialogBox.getOverflowDialog(GREETINGS, botImage));;
 
         // Scrolls to the bottom whenever height changes.
         dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
@@ -89,10 +89,10 @@ public class Main extends Application {
         String input = userInput.getText();
         if (!input.isEmpty()) {
             // Add user message
-            dialogContainer.getChildren().add(new DialogBox(input, userImage));
+            dialogContainer.getChildren().add(DialogBox.getUserDialog(input, userImage));
 
             if (input.equals("bye")) {
-                dialogContainer.getChildren().add(new DialogBox(FAREWELL, botImage));
+                dialogContainer.getChildren().add(DialogBox.getOverflowDialog(FAREWELL, botImage));
                 userInput.setDisable(true);
                 sendButton.setDisable(true);
 
@@ -103,8 +103,7 @@ public class Main extends Application {
                 delay.play();
             } else {
                 String response = overflow.getResponse(input);
-                dialogContainer.getChildren().add(new DialogBox(response, botImage));
-            }
+                dialogContainer.getChildren().add(DialogBox.getOverflowDialog(response, botImage));            }
 
             userInput.clear();
         }
