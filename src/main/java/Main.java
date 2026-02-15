@@ -1,3 +1,4 @@
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -8,6 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import overflow.Overflow;
 
@@ -16,6 +18,9 @@ import overflow.Overflow;
  */
 public class Main extends Application {
     private static final String DEFAULT_FILE_PATH = "./data/tasks.txt";
+    private static final String GREETINGS = "Good to see you!\n"
+            + "I'm Overflow, lemme know what I could do for you :>";
+    private static final String FAREWELL = "Looking for the next time we meet!";
     private VBox dialogContainer;
     private TextField userInput;
     private Button sendButton;
@@ -71,6 +76,8 @@ public class Main extends Application {
 
         sendButton.setOnAction(e -> handleUserInput());
 
+        dialogContainer.getChildren().add(new DialogBox(GREETINGS, botImage));
+
         stage.setScene(scene);
         stage.show();
     }
@@ -81,9 +88,20 @@ public class Main extends Application {
             // Add user message
             dialogContainer.getChildren().add(new DialogBox(input, userImage));
 
-            // Get bot response
-            String response = overflow.getResponse(input);
-            dialogContainer.getChildren().add(new DialogBox(response, botImage));
+            if (input.equals("bye")) {
+                dialogContainer.getChildren().add(new DialogBox(FAREWELL, botImage));
+                userInput.setDisable(true);
+                sendButton.setDisable(true);
+
+                // Close after 2 seconds
+                // TODO: Allow the window to display countdown and cancel the close action
+                PauseTransition delay = new PauseTransition(Duration.seconds(2));
+                delay.setOnFinished(event -> javafx.application.Platform.exit());
+                delay.play();
+            } else {
+                String response = overflow.getResponse(input);
+                dialogContainer.getChildren().add(new DialogBox(response, botImage));
+            }
 
             userInput.clear();
         }
