@@ -214,6 +214,35 @@ public class Overflow {
     }
 
     /**
+     * Processes user input and returns the response.
+     *
+     * @param input The user's input command.
+     * @return The chatbot's response as a String.
+     */
+    public String getResponse(String input) {
+        if (input.equals("bye")) {
+            return "Looking for the next time we meet!";
+        }
+
+        try {
+            // Capture the output by temporarily redirecting it
+            java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+            java.io.PrintStream ps = new java.io.PrintStream(baos);
+            java.io.PrintStream old = System.out;
+            System.setOut(ps);
+
+            handleCommand(input);
+
+            System.out.flush();
+            System.setOut(old);
+
+            return baos.toString().trim();
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    /**
      * Main method to run the chatbot.Overflow chatbot.
      *
      * @param args Command line arguments (not used).
