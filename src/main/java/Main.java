@@ -78,6 +78,9 @@ public class Main extends Application {
 
         dialogContainer.getChildren().add(new DialogBox(GREETINGS, botImage));
 
+        // Scrolls to the bottom whenever height changes.
+        dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
+
         stage.setScene(scene);
         stage.show();
     }
