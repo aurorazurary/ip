@@ -2,6 +2,7 @@ package overflow.tasklist;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import overflow.exception.OverflowException;
 import overflow.task.Task;
@@ -113,14 +114,9 @@ public class TaskList {
         HashMap<String, ArrayList<Task>> resultsByKeyword = new HashMap<>();
 
         for (String keyword : keywords) {
-            ArrayList<Task> matchingTasks = new ArrayList<>();
-
-            for (Task task : tasks) {
-                String taskName = task.getName().toLowerCase();
-                if (taskName.contains(keyword.toLowerCase())) {
-                    matchingTasks.add(task);
-                }
-            }
+            ArrayList<Task> matchingTasks = tasks.stream()
+                    .filter(task -> task.getName().toLowerCase().contains(keyword.toLowerCase()))
+                    .collect(Collectors.toCollection(ArrayList::new));
 
             if (!matchingTasks.isEmpty()) {
                 resultsByKeyword.put(keyword, matchingTasks);
