@@ -12,6 +12,7 @@ import overflow.task.Task;
  */
 public class TaskList {
     private ArrayList<Task> tasks;
+    private ArrayList<Task> previousTasks;
 
     /**
      * Creates an empty overflow.tasklist.TaskList.
@@ -27,6 +28,18 @@ public class TaskList {
      */
     public TaskList(ArrayList<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public void saveState() {
+        previousTasks = new ArrayList<>(tasks);  // Deep copy
+    }
+
+    public void undo() throws OverflowException {
+        if (previousTasks == null) {
+            throw new OverflowException("Nothing to undo!");
+        }
+        tasks = previousTasks;
+        previousTasks = null;
     }
 
     /**
