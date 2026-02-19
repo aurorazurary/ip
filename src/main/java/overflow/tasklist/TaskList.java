@@ -56,6 +56,8 @@ public class TaskList {
      */
     public Task get(int index) throws OverflowException {
         validateIndex(index);
+        assert index >= 0 : "Index should be non-negative after validation";
+        assert index < tasks.size() : "Index should be within bounds after validation";
         return tasks.get(index);
     }
 

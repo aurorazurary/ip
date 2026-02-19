@@ -134,7 +134,9 @@ public class Parser {
         }
 
         try {
-            return Integer.parseInt(indexString);
+            int index = Integer.parseInt(indexString);
+            assert index > 0 : "Parsed index should be positive";
+            return index;
         } catch (NumberFormatException e) {
             throw new OverflowException("OOPS! Please provide a valid overflow.task number!");
         }
