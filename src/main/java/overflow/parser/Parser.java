@@ -12,6 +12,9 @@ import overflow.exception.OverflowException;
  * Parses user input into commands and their parameters.
  */
 public class Parser {
+    private static final int TODO_COMMAND_LENGTH = 4; // length of "todo"
+    private static final int DEADLINE_COMMAND_LENGTH = 8; // length of "deadline"
+    private static final int EVENT_COMMAND_LENGTH = 5; // length of "event"
 
     /**
      * Parses the user input and returns the command type.
@@ -20,8 +23,8 @@ public class Parser {
      * @return The command type (e.g., "list", "mark", "todo").
      */
     public static String parseCommand(String input) {
-        String[] parts = input.split(" ", 2);
-        String command = parts[0];
+        String[] commandParts = input.split(" ", 2);
+        String command = commandParts[0];
 
         switch (command) {
         case "list":
@@ -53,7 +56,7 @@ public class Parser {
      * @throws OverflowException If the description is empty.
      */
     public static String parseTodo(String input) throws OverflowException {
-        String description = input.substring(4).trim();
+        String description = input.substring(TODO_COMMAND_LENGTH).trim();
         if (description.isEmpty()) {
             throw new OverflowException("OOPS!!! The description of a todo cannot be empty.");
         }
@@ -68,20 +71,20 @@ public class Parser {
      * @throws OverflowException If the description or deadline is invalid.
      */
     public static Object[] parseDeadline(String input) throws OverflowException {
-        String processedInput = input.substring(8).trim();
+        String processedInput = input.substring(DEADLINE_COMMAND_LENGTH).trim();
 
         if (processedInput.isEmpty()) {
             throw new OverflowException("OOPS!!! The description of a deadline cannot be empty.");
         }
 
-        String[] parts = processedInput.split(" /by ");
+        String[] deadlineParts = processedInput.split(" /by ");
 
-        if (parts.length < 2 || parts[1].trim().isEmpty()) {
+        if (deadlineParts.length < 2 || deadlineParts[1].trim().isEmpty()) {
             throw new OverflowException("OOPS!!! The deadline must have a /by time.");
         }
 
-        String description = parts[0];
-        LocalDateTime dateTime = parseDateTime(parts[1]); // This will throw if format is wrong
+        String description = deadlineParts[0];
+        LocalDateTime dateTime = parseDateTime(deadlineParts[1]); // This will throw if format is wrong
 
         return new Object[]{description, dateTime};
     }
@@ -94,26 +97,26 @@ public class Parser {
      * @throws OverflowException If the description or times are invalid.
      */
     public static Object[] parseEvent(String input) throws OverflowException {
-        String processedInput = input.substring(5).trim();
+        String processedInput = input.substring(EVENT_COMMAND_LENGTH).trim();
 
         if (processedInput.isEmpty()) {
             throw new OverflowException("OOPS!!! The description of an event cannot be empty.");
         }
 
-        String[] parts = processedInput.split(" /from ");
-        if (parts.length < 2) {
+        String[] eventParts = processedInput.split(" /from ");
+        if (eventParts.length < 2) {
             throw new OverflowException("OOPS!!! The event must have a /from time.");
         }
 
-        String description = parts[0];
-        String[] timeParts = parts[1].split(" /to ");
+        String description = eventParts[0];
+        String[] eventTimeParts = eventParts[1].split(" /to ");
 
-        if (timeParts.length < 2 || timeParts[1].trim().isEmpty()) {
+        if (eventTimeParts.length < 2 || eventTimeParts[1].trim().isEmpty()) {
             throw new OverflowException("OOPS!!! The event must have a /to time.");
         }
 
-        LocalDateTime startTime = parseDateTime(timeParts[0]);
-        LocalDateTime endTime = parseDateTime(timeParts[1]);
+        LocalDateTime startTime = parseDateTime(eventTimeParts[0]);
+        LocalDateTime endTime = parseDateTime(eventTimeParts[1]);
 
         return new Object[]{description, startTime, endTime};
     }
@@ -123,20 +126,20 @@ public class Parser {
      *
      * @param input The full user input.
      * @param commandLength The length of the command word.
-     * @return The overflow.task index (1-based).
+     * @return The task index (1-based).
      * @throws OverflowException If the index is missing or invalid.
      */
     public static int parseIndex(String input, int commandLength) throws OverflowException {
         String indexString = input.substring(commandLength).trim();
 
         if (indexString.isEmpty()) {
-            throw new OverflowException("OOPS! You have to choose a overflow.task number!");
+            throw new OverflowException("OOPS! You have to choose a task number!");
         }
 
         try {
             return Integer.parseInt(indexString);
         } catch (NumberFormatException e) {
-            throw new OverflowException("OOPS! Please provide a valid overflow.task number!");
+            throw new OverflowException("OOPS! Please provide a valid task number!");
         }
     }
 
@@ -160,53 +163,53 @@ public class Parser {
 
     /**
      * Parses a date-time string into LocalDateTime, allows a variety of
-     * input formate.
+     * input formats.
      *
      * @param dateTimeString The date-time string in various formats.
      * @return LocalDateTime object.
      * @throws OverflowException If the date-time format is invalid.
      */
     public static LocalDateTime parseDateTime(String dateTimeString) throws OverflowException {
-        String string = dateTimeString.trim().toLowerCase();
+        String dateString = dateTimeString.trim().toLowerCase();
 
         try {
-            //now
-            if (string.equals("now")) {
+            // now
+            if (dateString.equals("now")) {
                 return LocalDateTime.now();
             }
 
             // today
-            if (string.equals("today")) {
+            if (dateString.equals("today")) {
                 return LocalDate.now().atStartOfDay();
             }
 
             // HHmm
-            if (string.matches("\\d{4}")) {
-                LocalTime exactTime = LocalTime.parse(string, DateTimeFormatter.ofPattern("HHmm"));
-                return LocalDate.now().atTime(exactTime);
+            if (dateString.matches("\\d{4}")) {
+                LocalTime timeOfDay = LocalTime.parse(dateString, DateTimeFormatter.ofPattern("HHmm"));
+                return LocalDate.now().atTime(timeOfDay);
             }
 
             // MM-dd HHmm
-            if (string.matches("\\d{2}-\\d{2} \\d{4}")) {
+            if (dateString.matches("\\d{2}-\\d{2} \\d{4}")) {
                 int year = LocalDate.now().getYear();
-                DateTimeFormatter exactTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-                return LocalDateTime.parse(year + "-" + string, exactTime);
+                DateTimeFormatter monthDayTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+                return LocalDateTime.parse(year + "-" + dateString, monthDayTimeFormatter);
             }
 
             // MM-dd
-            if (string.matches("\\d{2}-\\d{2}")) {
+            if (dateString.matches("\\d{2}-\\d{2}")) {
                 int year = LocalDate.now().getYear();
-                return LocalDate.parse(year + "-" + string).atStartOfDay();
+                return LocalDate.parse(year + "-" + dateString).atStartOfDay();
             }
 
             // yyyy-MM-dd HHmm
-            if (string.matches("\\d{4}-\\d{2}-\\d{2} \\d{4}")) {
-                DateTimeFormatter exactTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-                return LocalDateTime.parse(string, exactTime);
+            if (dateString.matches("\\d{4}-\\d{2}-\\d{2} \\d{4}")) {
+                DateTimeFormatter fullDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+                return LocalDateTime.parse(dateString, fullDateTimeFormatter);
             }
 
             // yyyy-MM-dd
-            return LocalDate.parse(string).atStartOfDay();
+            return LocalDate.parse(dateString).atStartOfDay();
 
         } catch (DateTimeParseException e) {
             throw new OverflowException(

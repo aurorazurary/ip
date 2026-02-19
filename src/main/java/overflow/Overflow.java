@@ -19,6 +19,9 @@ import overflow.ui.Ui;
  * Represents the main chatbot that helps users manage their tasks.
  */
 public class Overflow {
+    private static final int MARK_COMMAND_LENGTH = 4; // length of "mark"
+    private static final int UNMARK_COMMAND_LENGTH = 6; // length of "unmark"
+    private static final int DELETE_COMMAND_LENGTH = 6; // length of "delete"
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
@@ -114,7 +117,7 @@ public class Overflow {
      * @throws IOException If there's an error saving tasks.
      */
     private void handleMark(String input) throws OverflowException, IOException {
-        int index = Parser.parseIndex(input, 4) - 1;
+        int index = Parser.parseIndex(input, MARK_COMMAND_LENGTH) - 1;
 
         tasks.mark(index);
         ui.showTaskMarked(tasks.get(index));
@@ -129,7 +132,7 @@ public class Overflow {
      * @throws IOException If there's an error saving tasks.
      */
     private void handleUnmark(String input) throws OverflowException, IOException {
-        int index = Parser.parseIndex(input, 6) - 1;
+        int index = Parser.parseIndex(input, UNMARK_COMMAND_LENGTH) - 1;
 
         tasks.unmark(index);
         ui.showTaskUnmarked(tasks.get(index));
@@ -144,7 +147,7 @@ public class Overflow {
      * @throws IOException If there's an error saving tasks.
      */
     private void handleDelete(String input) throws OverflowException, IOException {
-        int index = Parser.parseIndex(input, 6) - 1;
+        int index = Parser.parseIndex(input, DELETE_COMMAND_LENGTH) - 1;
 
         Task deletedTask = tasks.delete(index);
         ui.showTaskDeleted(deletedTask, tasks.size());

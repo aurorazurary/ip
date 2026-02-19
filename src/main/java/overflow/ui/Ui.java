@@ -18,7 +18,7 @@ public class Ui {
     private Scanner scanner;
 
     /**
-     * Creates a overflow.ui.Ui object and initializes the scanner.
+     * Creates a Ui object and initializes the scanner.
      */
     public Ui() {
         this.scanner = new Scanner(System.in);
@@ -48,20 +48,20 @@ public class Ui {
     }
 
     /**
-     * Displays a message when a overflow.task is added.
+     * Displays a message when a task is added.
      *
-     * @param task The overflow.task that was added.
+     * @param task The task that was added.
      * @param taskCount The total number of tasks.
      */
     public void showTaskAdded(Task task, int taskCount) {
-        System.out.println("Got it! I've added the overflow.task: " + task);
+        System.out.println("Got it! I've added the task: " + task);
         System.out.println("Currently you have " + taskCount + " tasks.");
     }
 
     /**
-     * Displays a message when a overflow.task is deleted.
+     * Displays a message when a task is deleted.
      *
-     * @param task The overflow.task that was deleted.
+     * @param task The task that was deleted.
      * @param taskCount The total number of tasks.
      */
     public void showTaskDeleted(Task task, int taskCount) {
@@ -70,25 +70,25 @@ public class Ui {
     }
 
     /**
-     * Displays a message when a overflow.task is marked.
+     * Displays a message when a task is marked.
      *
-     * @param task The overflow.task that was marked.
+     * @param task The task that was marked.
      */
     public void showTaskMarked(Task task) {
         System.out.println("Marked! \n" + task);
     }
 
     /**
-     * Displays a message when a overflow.task is unmarked.
+     * Displays a message when a task is unmarked.
      *
-     * @param task The overflow.task that was unmarked.
+     * @param task The task that was unmarked.
      */
     public void showTaskUnmarked(Task task) {
         System.out.println("Unmarked! \n" + task);
     }
 
     /**
-     * Displays all tasks in the overflow.task list.
+     * Displays all tasks in the task list.
      *
      * @param tasks The list of tasks to display.
      */
@@ -97,7 +97,7 @@ public class Ui {
             System.out.println((i + 1) + ". " + tasks.get(i));
         }
         if (tasks.size() == 0) {
-            System.out.println("There currently isn't any added overflow.task QAQ");
+            System.out.println("There currently isn't any added task QAQ");
         }
     }
 
