@@ -43,6 +43,8 @@ public class Parser {
             return "event";
         case "find":
             return "find";
+        case "undo":
+            return "undo";
         default:
             return "unknown";
         }

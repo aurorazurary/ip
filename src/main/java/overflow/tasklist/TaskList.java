@@ -15,14 +15,14 @@ public class TaskList {
     private ArrayList<Task> previousTasks;
 
     /**
-     * Creates an empty overflow.tasklist.TaskList.
+     * Creates an empty TaskList.
      */
     public TaskList() {
         this.tasks = new ArrayList<>();
     }
 
     /**
-     * Creates a overflow.tasklist.TaskList with the given list of tasks.
+     * Creates a TaskList with the given list of tasks.
      *
      * @param tasks The initial list of tasks.
      */
@@ -30,10 +30,19 @@ public class TaskList {
         this.tasks = tasks;
     }
 
+    /**
+     * Saves the current state of the task list for potential undo operation.
+     * Only the most recent state is saved.
+     */
     public void saveState() {
-        previousTasks = new ArrayList<>(tasks);  // Deep copy
+        previousTasks = new ArrayList<>(tasks);
     }
 
+    /**
+     * Restores the task list to the previously saved state.
+     *
+     * @throws OverflowException If there is no previous state to restore.
+     */
     public void undo() throws OverflowException {
         if (previousTasks == null) {
             throw new OverflowException("Nothing to undo!");
@@ -43,19 +52,19 @@ public class TaskList {
     }
 
     /**
-     * Adds a overflow.task to the list.
+     * Adds a task to the list.
      *
-     * @param task The overflow.task to add.
+     * @param task The task to add.
      */
     public void add(Task task) {
         tasks.add(task);
     }
 
     /**
-     * Deletes a overflow.task from the list.
+     * Deletes a task from the list.
      *
-     * @param index The index of the overflow.task to delete (0-based).
-     * @return The deleted overflow.task.
+     * @param index The index of the task to delete (0-based).
+     * @return The deleted task.
      */
     public Task delete(int index) throws OverflowException {
         validateIndex(index);
@@ -63,10 +72,10 @@ public class TaskList {
     }
 
     /**
-     * Gets a overflow.task from the list.
+     * Gets a task from the list.
      *
-     * @param index The index of the overflow.task (0-based).
-     * @return The overflow.task at the specified index.
+     * @param index The index of the task (0-based).
+     * @return The task at the specified index.
      */
     public Task get(int index) throws OverflowException {
         validateIndex(index);
@@ -76,9 +85,9 @@ public class TaskList {
     }
 
     /**
-     * Marks a overflow.task as done.
+     * Marks a task as done.
      *
-     * @param index The index of the overflow.task to mark (0-based).
+     * @param index The index of the task to mark (0-based).
      */
     public void mark(int index) throws OverflowException {
         validateIndex(index);
@@ -86,9 +95,9 @@ public class TaskList {
     }
 
     /**
-     * Marks a overflow.task as not done.
+     * Marks a task as not done.
      *
-     * @param index The index of the overflow.task to unmark (0-based).
+     * @param index The index of the task to unmark (0-based).
      */
     public void unmark(int index) throws OverflowException {
         validateIndex(index);
@@ -98,7 +107,7 @@ public class TaskList {
     /**
      * Returns the number of tasks in the list.
      *
-     * @return The size of the overflow.task list.
+     * @return The size of the task list.
      */
     public int size() {
         return tasks.size();
