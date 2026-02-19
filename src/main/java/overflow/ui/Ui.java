@@ -122,6 +122,13 @@ public class Ui {
     }
 
     /**
+     * Displays a message when an operation is successfully undone.
+     */
+    public void showUndo() {
+        System.out.println("Undone! Restored to previous state.");
+    }
+
+    /**
      * Displays an error message.
      *
      * @param message The error message to display.

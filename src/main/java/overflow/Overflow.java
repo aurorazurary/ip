@@ -107,6 +107,9 @@ public class Overflow {
         case "find":
             handleFind(input);
             break;
+        case "undo":
+            handleUndo();
+            break;
         default:
             ui.showError("Sorry I don't understand what you are saying ;-;");
         }
@@ -121,6 +124,8 @@ public class Overflow {
      */
     private void handleMark(String input) throws OverflowException, IOException {
         int index = Parser.parseIndex(input, MARK_COMMAND_LENGTH) - 1;
+
+        tasks.saveState();
 
         tasks.mark(index);
         ui.showTaskMarked(tasks.get(index));
@@ -137,6 +142,8 @@ public class Overflow {
     private void handleUnmark(String input) throws OverflowException, IOException {
         int index = Parser.parseIndex(input, UNMARK_COMMAND_LENGTH) - 1;
 
+        tasks.saveState();
+
         tasks.unmark(index);
         ui.showTaskUnmarked(tasks.get(index));
         storage.saveChange(tasks.getTasks());
@@ -151,6 +158,8 @@ public class Overflow {
      */
     private void handleDelete(String input) throws OverflowException, IOException {
         int index = Parser.parseIndex(input, DELETE_COMMAND_LENGTH) - 1;
+
+        tasks.saveState();
 
         Task deletedTask = tasks.delete(index);
         ui.showTaskDeleted(deletedTask, tasks.size());
@@ -167,6 +176,9 @@ public class Overflow {
     private void handleTodo(String input) throws OverflowException, IOException {
         String description = Parser.parseTodo(input);
         Task newTask = new Todo(description);
+
+        tasks.saveState();
+
         tasks.add(newTask);
         ui.showTaskAdded(newTask, tasks.size());
         storage.saveChange(tasks.getTasks());
@@ -184,6 +196,9 @@ public class Overflow {
         String description = (String) parts[0];
         LocalDateTime deadline = (LocalDateTime) parts[1];
         Task newTask = new Deadline(description, deadline);
+
+        tasks.saveState();
+
         tasks.add(newTask);
         ui.showTaskAdded(newTask, tasks.size());
         storage.saveChange(tasks.getTasks());
@@ -202,6 +217,9 @@ public class Overflow {
         LocalDateTime startTime = (LocalDateTime) parts[1];
         LocalDateTime endTime = (LocalDateTime) parts[2];
         Task newTask = new Event(description, startTime, endTime);
+
+        tasks.saveState();
+
         tasks.add(newTask);
         ui.showTaskAdded(newTask, tasks.size());
         storage.saveChange(tasks.getTasks());
@@ -217,6 +235,18 @@ public class Overflow {
         String[] keywords = Parser.parseKeyword(input, 4);
         HashMap<String, ArrayList<Task>> results = tasks.find(keywords);
         ui.showSearchResults(results);
+    }
+
+    /**
+     * Handles the undo command to restore the previous state of the task list.
+     *
+     * @throws OverflowException If there is nothing to undo.
+     * @throws IOException If there's an error saving tasks.
+     */
+    private void handleUndo() throws OverflowException, IOException {
+        tasks.undo();
+        ui.showUndo();
+        storage.saveChange(tasks.getTasks());
     }
 
     /**
