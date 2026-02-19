@@ -32,6 +32,9 @@ public class Overflow {
      * @param filePath Path to the file where tasks are stored.
      */
     public Overflow(String filePath) {
+        assert filePath != null : "File path cannot be null";
+        assert !filePath.isEmpty() : "File path cannot be empty";
+
         ui = new Ui();
         storage = new Storage(filePath);
         try {
