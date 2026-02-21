@@ -59,7 +59,9 @@ public class DialogBox extends HBox {
      * @return A DialogBox with user styling.
      */
     public static DialogBox getUserDialog(String text, Image image) {
-        return new DialogBox(text, image);
+        DialogBox db = new DialogBox(text, image);
+        db.dialog.getStyleClass().add("user-bubble");
+        return db;
     }
 
     /**
@@ -72,6 +74,7 @@ public class DialogBox extends HBox {
     public static DialogBox getOverflowDialog(String text, Image image) {
         DialogBox dialogBox = new DialogBox(text, image);
         dialogBox.flip();
+        dialogBox.dialog.getStyleClass().add("bot-bubble");
         return dialogBox;
     }
 }

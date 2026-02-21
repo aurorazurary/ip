@@ -1,0 +1,53 @@
+AnchorPane {
+    -fx-background-image: url("../images/background.jpg");
+    -fx-background-size: fill;
+}
+
+/* ScrollPane background */
+.scroll-pane,
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Text input field */
+.text-field {
+    -fx-background-color: #fab2e3;
+    -fx-border-color: #71f8ff;
+    -fx-border-width: 6px;
+    -fx-font-size: 12px;
+    -fx-text-fill: black;
+}
+
+/* Send button */
+.button {
+    -fx-background-color: #fab2e3;
+    -fx-border-color: #71f8ff;
+    -fx-border-width: 6px;
+    -fx-font-size: 12px;
+    -fx-text-fill: black;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #E0E0E0;
+}
+
+.button:pressed {
+    -fx-background-color: #D0D0D0;
+}
+
+/* Scrollbar styling */
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #C0C0C0;
+    -fx-background-radius: 0;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
+}
