@@ -21,7 +21,7 @@ public class Storage {
     private String filePath;
 
     /**
-     * Creates a overflow.storage.Storage object with the specified file path.
+     * Creates a Storage object with the specified file path.
      *
      * @param filePath Path to the file where tasks are stored.
      */

@@ -129,7 +129,7 @@ public class Ui {
     }
 
     /**
-     * Displays an error message.
+     * Displays an error mesage.
      *
      * @param message The error message to display.
      */

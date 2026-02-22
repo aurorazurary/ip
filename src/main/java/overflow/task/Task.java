@@ -1,38 +1,39 @@
 package overflow.task;
 
 /**
- * Represents a overflow.task with a description and completion status.
+ * Represents a task with a description and completion status.
  */
 public class Task {
     private String name;
-    private boolean done = false;
+    private boolean isDone = false;
 
     /**
-     * Creates a new overflow.task with the given content.
+     * Creates a new task with the given content.
      *
-     * @param name Description of the overflow.task.
+     * @param name Description of the task.
      */
     public Task(String name) {
         this.name = name;
     }
 
     /**
-     * Marks the overflow.task as done.
+     * Marks the task as done.
      */
     public void mark() {
-        done = true;
+        isDone = true;
     }
 
     /**
-     * Marks the overflow.task as not done.
+     * Marks the task as not done.
      */
     public void unmark() {
-        done = false;
+        isDone = false;
     }
 
     /**
-     * Return the name of the overflow.task.
-     * @return name Name of the overflow.task.
+     * Return the name of the task.
+     *
+     * @return name Name of the task.
      */
     public String getName() {
         return name;
@@ -44,13 +45,13 @@ public class Task {
      * @return A string representation in the format "status | name" where status is 1 for done, 0 for not done.
      */
     public String toFileFormat() {
-        int isDone = done ? 1 : 0;
+        int isDone = this.isDone ? 1 : 0;
         return isDone + " | " + name;
     }
 
     @Override
     public String toString() {
-        String mark = done ? "X" : " ";
+        String mark = isDone ? "X" : " ";
         return "[" + mark + "] " + name;
     }
 }

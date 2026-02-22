@@ -268,7 +268,7 @@ public class Overflow {
     }
 
     /**
-     * Main method to run the chatbot.Overflow chatbot.
+     * Main method to run the Overflow chatbot.
      *
      * @param args Command line arguments (not used).
      */

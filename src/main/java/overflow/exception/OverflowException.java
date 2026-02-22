@@ -6,7 +6,7 @@ package overflow.exception;
 public class OverflowException extends Exception {
 
     /**
-     * Creates an overflow.exception.OverflowException with the specified message.
+     * Creates an exception.OverflowException with the specified message.
      *
      * @param message The error message.
      */
