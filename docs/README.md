@@ -24,6 +24,7 @@ Currently you have 1 tasks.
 ```
 
 ---
+
 **Date/Time formats supported:**
 - `now` - Current time
 - `today` - Today at midnight
@@ -32,6 +33,7 @@ Currently you have 1 tasks.
 - `MM-dd HHmm` - This year on specific date and time
 - `yyyy-MM-dd` - Specific date
 - `yyyy-MM-dd HHmm` - Specific date and time
+
 ---
 
 ### Adding a Deadline: `deadline`
