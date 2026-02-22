@@ -12,7 +12,9 @@ import overflow.task.Task;
  */
 public class TaskList {
     private ArrayList<Task> tasks;
-    private ArrayList<Task> previousTasks;
+    private String lastAction = null;
+    private Task lastTask = null;
+    private int lastIndex;
 
     /**
      * Creates an empty TaskList.
@@ -31,24 +33,31 @@ public class TaskList {
     }
 
     /**
-     * Saves the current state of the task list for potential undo operation.
-     * Only the most recent state is saved.
-     */
-    public void saveState() {
-        previousTasks = new ArrayList<>(tasks);
-    }
-
-    /**
      * Restores the task list to the previously saved state.
      *
      * @throws OverflowException If there is no previous state to restore.
      */
     public void undo() throws OverflowException {
-        if (previousTasks == null) {
+        if (lastAction == null) {
             throw new OverflowException("Nothing to undo!");
         }
-        tasks = previousTasks;
-        previousTasks = null;
+
+        switch (lastAction) {
+        case "add":
+            tasks.remove(lastTask);  // Remove the task that was added
+            break;
+        case "delete":
+            tasks.add(lastIndex, lastTask);  // Re-add at original position
+            break;
+        case "mark":
+            tasks.get(lastIndex).unmark();  // Unmark it
+            break;
+        case "unmark":
+            tasks.get(lastIndex).mark();  // Mark it back
+            break;
+        }
+
+        lastAction = null;
     }
 
     /**
@@ -58,6 +67,8 @@ public class TaskList {
      */
     public void add(Task task) {
         tasks.add(task);
+        lastAction = "add";
+        lastTask = task;
     }
 
     /**
@@ -68,7 +79,11 @@ public class TaskList {
      */
     public Task delete(int index) throws OverflowException {
         validateIndex(index);
-        return tasks.remove(index);
+        Task deleted = tasks.remove(index);
+        lastAction = "delete";
+        lastTask = deleted;
+        lastIndex = index;
+        return deleted;
     }
 
     /**
@@ -92,6 +107,8 @@ public class TaskList {
     public void mark(int index) throws OverflowException {
         validateIndex(index);
         tasks.get(index).mark();
+        lastAction = "mark";
+        lastIndex = index;
     }
 
     /**
@@ -102,6 +119,8 @@ public class TaskList {
     public void unmark(int index) throws OverflowException {
         validateIndex(index);
         tasks.get(index).unmark();
+        lastAction = "unmark";
+        lastIndex = index;
     }
 
     /**
