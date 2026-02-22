@@ -1,8 +1,0 @@
-T | 1 | 234
-T | 0 | 123
-T | 0 | 456
-E | 1 | 123 | 234 | 456
-D | 1 | 12345 | tomorrow
-T | 0 | sleep
-E | 0 | sleep | tmr | forever
-D | 1 | sleep | yesterday

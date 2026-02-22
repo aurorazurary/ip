@@ -1,9 +1,8 @@
-/* Base style - remove default background */
+/* Base style */
 .label {
     -fx-background-color: transparent;
     -fx-text-fill: black;
     -fx-font-size: 12px;
-    -fx-min-height: 100px;
 }
 
 /* User bubble - tail on right */
