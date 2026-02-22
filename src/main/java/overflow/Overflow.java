@@ -125,8 +125,6 @@ public class Overflow {
     private void handleMark(String input) throws OverflowException, IOException {
         int index = Parser.parseIndex(input, MARK_COMMAND_LENGTH) - 1;
 
-        tasks.saveState();
-
         tasks.mark(index);
         ui.showTaskMarked(tasks.get(index));
         storage.saveChange(tasks.getTasks());
@@ -141,8 +139,6 @@ public class Overflow {
      */
     private void handleUnmark(String input) throws OverflowException, IOException {
         int index = Parser.parseIndex(input, UNMARK_COMMAND_LENGTH) - 1;
-
-        tasks.saveState();
 
         tasks.unmark(index);
         ui.showTaskUnmarked(tasks.get(index));
@@ -159,8 +155,6 @@ public class Overflow {
     private void handleDelete(String input) throws OverflowException, IOException {
         int index = Parser.parseIndex(input, DELETE_COMMAND_LENGTH) - 1;
 
-        tasks.saveState();
-
         Task deletedTask = tasks.delete(index);
         ui.showTaskDeleted(deletedTask, tasks.size());
         storage.saveChange(tasks.getTasks());
@@ -176,8 +170,6 @@ public class Overflow {
     private void handleTodo(String input) throws OverflowException, IOException {
         String description = Parser.parseTodo(input);
         Task newTask = new Todo(description);
-
-        tasks.saveState();
 
         tasks.add(newTask);
         ui.showTaskAdded(newTask, tasks.size());
@@ -197,8 +189,6 @@ public class Overflow {
         LocalDateTime deadline = (LocalDateTime) parts[1];
         Task newTask = new Deadline(description, deadline);
 
-        tasks.saveState();
-
         tasks.add(newTask);
         ui.showTaskAdded(newTask, tasks.size());
         storage.saveChange(tasks.getTasks());
@@ -217,8 +207,6 @@ public class Overflow {
         LocalDateTime startTime = (LocalDateTime) parts[1];
         LocalDateTime endTime = (LocalDateTime) parts[2];
         Task newTask = new Event(description, startTime, endTime);
-
-        tasks.saveState();
 
         tasks.add(newTask);
         ui.showTaskAdded(newTask, tasks.size());
