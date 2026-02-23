@@ -92,7 +92,12 @@ public class Storage {
 
         // Create the directory if it doesn't exist
         if (directory != null && !directory.exists()) {
-            directory.mkdirs();
+            boolean created = directory.mkdirs();
+            if (!created) {
+                throw new IOException("Failed to create directory: " + directory.getAbsolutePath()
+                + "Try creating the data folder manually in the same directory as the jar file."
+                + "n/Sorry for the inconvenience!");
+            }
         }
 
         FileWriter writer = new FileWriter(filePath);

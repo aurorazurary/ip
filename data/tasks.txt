@@ -1,3 +1,4 @@
 T | 0 | sleep
 E | 1 | sleep | 2026-02-21 1759 | 2026-02-21 1900
 D | 1 | sleep | 2026-02-21 2100
+T | 0 | buy groceries
