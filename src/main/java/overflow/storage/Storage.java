@@ -45,35 +45,66 @@ public class Storage {
         }
 
         Scanner scanner = new Scanner(file);
+        int lineNumber = 0;
+
         while (scanner.hasNext()) {
-            String[] parts = scanner.nextLine().split(" \\| ");
-            String taskType = parts[0];
-            String taskStatus = parts[1];
-            String taskName = parts[2];
+            lineNumber++;
+            String line = scanner.nextLine();
 
-            Task task = null;
-            switch (taskType) {
-            case "T" -> task = new Todo(taskName);
-            case "E" -> {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-                LocalDateTime startTime = LocalDateTime.parse(parts[3], formatter);
-                LocalDateTime endTime = LocalDateTime.parse(parts[4], formatter);
-                task = new Event(taskName, startTime, endTime);
-            }
-            case "D" -> {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-                LocalDateTime deadline = LocalDateTime.parse(parts[3], formatter);
-                task = new Deadline(taskName, deadline);
-            } default -> {
-                continue;
-            }
-            }
+            try {
+                String[] parts = line.split(" \\| ");
 
-            if (taskStatus.equals("1")) {
-                task.mark();
-            }
+                // Validate minimum parts
+                if (parts.length < 3) {
+                    System.err.println("Warning: Skipping corrupted line " + lineNumber + ": " + line);
+                    continue;
+                }
 
-            tasks.add(task);
+                String taskType = parts[0];
+                String taskStatus = parts[1];
+                String taskName = parts[2];
+
+                Task task = null;
+                switch (taskType) {
+                case "T" -> task = new Todo(taskName);
+                case "E" -> {
+                    if (parts.length < 5) {
+                        System.err.println("Warning: Skipping incomplete event at line " + lineNumber);
+                        continue;
+                    }
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+                    LocalDateTime startTime = LocalDateTime.parse(parts[3], formatter);
+                    LocalDateTime endTime = LocalDateTime.parse(parts[4], formatter);
+                    task = new Event(taskName, startTime, endTime);
+                }
+                case "D" -> {
+                    if (parts.length < 4) {
+                        System.err.println("Warning: Skipping incomplete deadline at line " + lineNumber);
+                        continue;
+                    }
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+                    LocalDateTime deadline = LocalDateTime.parse(parts[3], formatter);
+                    task = new Deadline(taskName, deadline);
+                }
+                default -> {
+                    System.err.println("Warning: Unknown task type '" + taskType + "' at line " + lineNumber);
+                    continue;
+                }
+                }
+
+                if (taskStatus.equals("1")) {
+                    task.mark();
+                }
+
+                tasks.add(task);
+
+            } catch (DateTimeParseException e) {
+                System.err.println("Warning: Invalid date format at line " + lineNumber + ": " + e.getMessage());
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.err.println("Warning: Corrupted data at line " + lineNumber + ": " + line);
+            } catch (Exception e) {
+                System.err.println("Warning: Error loading task at line " + lineNumber + ": " + e.getMessage());
+            }
         }
         scanner.close();
 
@@ -95,8 +126,8 @@ public class Storage {
             boolean created = directory.mkdirs();
             if (!created) {
                 throw new IOException("Failed to create directory: " + directory.getAbsolutePath()
-                + "Try creating the data folder manually in the same directory as the jar file."
-                + "n/Sorry for the inconvenience!");
+                + "\nTry creating the data folder manually in the same directory as the jar file."
+                + "\nSorry for the inconvenience!");
             }
         }
 
