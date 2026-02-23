@@ -11,7 +11,7 @@ import overflow.Overflow;
  * A GUI for Overflow using FXML.
  */
 public class Main extends Application {
-    private static final String DEFAULT_FILE_PATH = "./data/tasks.txt";
+    private static final String DEFAULT_FILE_PATH = "./overflow_data/tasks.txt";
     private static final String MAINWINDOW_FXML_FILE_PATH = "/view/MainWindow.fxml";
 
     private Overflow overflow = new Overflow(DEFAULT_FILE_PATH);
