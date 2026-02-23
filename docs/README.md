@@ -27,7 +27,8 @@ Currently you have 1 tasks.
 
 **Date/Time formats supported:**
 - `now` - Current time
-- `today` - Today at midnight
+- `today` - The start of today
+- `tonight` - Today 23:59
 - `HHmm` - Today at specific time (e.g., `1400`)
 - `MM-dd` - This year on specific date
 - `MM-dd HHmm` - This year on specific date and time
@@ -203,3 +204,11 @@ Your tasks are automatically saved to `./data/tasks.txt` after every change. The
 | Find | `find KEYWORD...` | `find book meeting` |
 | Undo | `undo` | `undo` |
 | Exit | `bye` | `bye` |
+
+## Possible issues
+**Message stating directory creation isn't successful**
+Solution: Manually create a `overflow_data` file in the same directory as the chatbot
+**Others**
+Contact me directly at
+`Telegram` @aurorazurary
+`Email` z.z@u.nus.edu
