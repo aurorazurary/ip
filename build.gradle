@@ -53,7 +53,7 @@ application {
 
 shadowJar {
     archiveBaseName = "overflow"
-    archiveVersion = '3.0'
+    archiveVersion = '3.0.1'
     archiveClassifier = null
 }
 
