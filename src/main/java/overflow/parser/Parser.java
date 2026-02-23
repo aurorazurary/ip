@@ -24,7 +24,7 @@ public class Parser {
      */
     public static String parseCommand(String input) {
         String[] commandParts = input.split(" ", 2);
-        String command = commandParts[0];
+        String command = commandParts[0].toLowerCase();
 
         switch (command) {
         case "list":
@@ -187,6 +187,11 @@ public class Parser {
                 return LocalDate.now().atStartOfDay();
             }
 
+            // tonight
+            if (dateString.equals("tonight")) {
+                return LocalDate.now().atTime(23, 59);
+            }
+
             // HHmm
             if (dateString.matches("\\d{4}")) {
                 LocalTime timeOfDay = LocalTime.parse(dateString, DateTimeFormatter.ofPattern("HHmm"));
@@ -217,7 +222,7 @@ public class Parser {
 
         } catch (DateTimeParseException e) {
             throw new OverflowException(
-                    "OOPS! Use: now, today, HHmm, MM-dd, MM-dd HHmm, yyyy-MM-dd, or yyyy-MM-dd HHmm"
+                    "OOPS! Use: now, today, tonight, HHmm, MM-dd, MM-dd HHmm, yyyy-MM-dd, or yyyy-MM-dd HHmm"
                             + " to indicate time!"
             );
         }
