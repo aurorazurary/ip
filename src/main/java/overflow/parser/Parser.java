@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import overflow.exception.OverflowException;
 
@@ -15,6 +18,25 @@ public class Parser {
     private static final int TODO_COMMAND_LENGTH = 4; // length of "todo"
     private static final int DEADLINE_COMMAND_LENGTH = 8; // length of "deadline"
     private static final int EVENT_COMMAND_LENGTH = 5; // length of "event"
+    private static final List<Map.Entry<String, Function<String, LocalDateTime>>> FORMAT_PARSERS = List.of(
+            Map.entry("now", s -> LocalDateTime.now()),
+            Map.entry("today", s -> LocalDate.now().atStartOfDay()),
+            Map.entry("tonight", s -> LocalDate.now().atTime(23, 59)),
+            Map.entry("\\d{4}", s -> LocalDate.now().atTime(
+                    LocalTime.parse(s, DateTimeFormatter.ofPattern("HHmm")))),
+            Map.entry("\\d{2}-\\d{2} \\d{4}", s -> {
+                int year = LocalDate.now().getYear();
+                return LocalDateTime.parse(year + "-" + s,
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+            }),
+            Map.entry("\\d{2}-\\d{2}", s -> {
+                int year = LocalDate.now().getYear();
+                return LocalDate.parse(year + "-" + s).atStartOfDay();
+            }),
+            Map.entry("\\d{4}-\\d{2}-\\d{2} \\d{4}", s ->
+                    LocalDateTime.parse(s, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"))),
+            Map.entry("\\d{4}-\\d{2}-\\d{2}", s -> LocalDate.parse(s).atStartOfDay())
+    );
 
     /**
      * Parses the user input and returns the command type.
@@ -175,57 +197,18 @@ public class Parser {
      */
     public static LocalDateTime parseDateTime(String dateTimeString) throws OverflowException {
         String dateString = dateTimeString.trim().toLowerCase();
-
         try {
-            // now
-            if (dateString.equals("now")) {
-                return LocalDateTime.now();
+            for (var entry : FORMAT_PARSERS) {
+                if (dateString.matches(entry.getKey()) || dateString.equals(entry.getKey())) {
+                    return entry.getValue().apply(dateString);
+                }
             }
-
-            // today
-            if (dateString.equals("today")) {
-                return LocalDate.now().atStartOfDay();
-            }
-
-            // tonight
-            if (dateString.equals("tonight")) {
-                return LocalDate.now().atTime(23, 59);
-            }
-
-            // HHmm
-            if (dateString.matches("\\d{4}")) {
-                LocalTime timeOfDay = LocalTime.parse(dateString, DateTimeFormatter.ofPattern("HHmm"));
-                return LocalDate.now().atTime(timeOfDay);
-            }
-
-            // MM-dd HHmm
-            if (dateString.matches("\\d{2}-\\d{2} \\d{4}")) {
-                int year = LocalDate.now().getYear();
-                DateTimeFormatter monthDayTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-                return LocalDateTime.parse(year + "-" + dateString, monthDayTimeFormatter);
-            }
-
-            // MM-dd
-            if (dateString.matches("\\d{2}-\\d{2}")) {
-                int year = LocalDate.now().getYear();
-                return LocalDate.parse(year + "-" + dateString).atStartOfDay();
-            }
-
-            // yyyy-MM-dd HHmm
-            if (dateString.matches("\\d{4}-\\d{2}-\\d{2} \\d{4}")) {
-                DateTimeFormatter fullDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-                return LocalDateTime.parse(dateString, fullDateTimeFormatter);
-            }
-
-            // yyyy-MM-dd
-            return LocalDate.parse(dateString).atStartOfDay();
-
         } catch (DateTimeParseException e) {
-            throw new OverflowException(
-                    "OOPS! Use: now, today, tonight, HHmm, MM-dd, MM-dd HHmm, yyyy-MM-dd, or yyyy-MM-dd HHmm"
-                            + " to indicate time!"
-            );
+            // fall through to exception below so that something is being returned
         }
+        throw new OverflowException(
+                "OOPS! Use: now, today, tonight, HHmm, MM-dd, MM-dd HHmm, yyyy-MM-dd, or yyyy-MM-dd HHmm"
+                        + " to indicate time!");
     }
 
 }
