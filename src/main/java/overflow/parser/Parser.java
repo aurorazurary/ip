@@ -199,7 +199,7 @@ public class Parser {
         String dateString = dateTimeString.trim().toLowerCase();
         try {
             for (var entry : FORMAT_PARSERS) {
-                if (dateString.matches(entry.getKey()) || dateString.equals(entry.getKey())) {
+                if (dateString.matches(entry.getKey())) {
                     return entry.getValue().apply(dateString);
                 }
             }
